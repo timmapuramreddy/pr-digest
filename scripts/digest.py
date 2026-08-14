@@ -1,0 +1,290 @@
+#!/usr/bin/env python3
+"""Daily PR digest across the Scikraft repos.
+
+Reads every configured repo, finds open non-draft PRs, ages them into
+buckets, writes an HTML email body, and (optionally) pings PRs that have
+been waiting past the escalation threshold.
+
+Stdlib only — no pip install step in CI.
+"""
+
+import json
+import os
+import sys
+import urllib.error
+import urllib.request
+from datetime import datetime, timezone
+
+API = "https://api.github.com"
+
+REPOS = [
+    "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
+    "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+    "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+    "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+    "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+    "Scikraft-Edu-Engg-Design/xp-live-mobile",
+    "scikraft-eed/xperimentor-devops",
+]
+
+# Ageing thresholds, in days.
+STALE_DAYS = 3
+ESCALATE_DAYS = 7
+
+# Hidden marker so we can tell our own ping comments apart from human ones.
+PING_MARKER = "<!-- pr-digest-stale-ping -->"
+
+TOKEN = os.environ["PR_SCAN_TOKEN"]
+VIEWER = os.environ.get("VIEWER_LOGIN", "timmapuramreddy")
+DRY_RUN = os.environ.get("DRY_RUN", "false").lower() == "true"
+
+NOW = datetime.now(timezone.utc)
+
+
+def api(path, method="GET", body=None):
+    """Call the GitHub API. Returns parsed JSON, or None on 404."""
+    url = path if path.startswith("http") else f"{API}{path}"
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(url, data=data, method=method)
+    req.add_header("Authorization", f"Bearer {TOKEN}")
+    req.add_header("Accept", "application/vnd.github+json")
+    req.add_header("X-GitHub-Api-Version", "2022-11-28")
+    if data is not None:
+        req.add_header("Content-Type", "application/json")
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            return json.loads(resp.read() or b"null")
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            return None
+        raise
+
+
+def parse_ts(value):
+    return datetime.fromisoformat(value.replace("Z", "+00:00"))
+
+
+def age_days(ts):
+    return (NOW - ts).total_seconds() / 86400
+
+
+def last_human_review(repo, number):
+    """Most recent review timestamp from someone other than the PR author.
+
+    Returns None when nobody has reviewed yet — that is the case we most
+    want to surface.
+    """
+    reviews = api(f"/repos/{repo}/pulls/{number}/reviews?per_page=100") or []
+    stamps = [parse_ts(r["submitted_at"]) for r in reviews if r.get("submitted_at")]
+    return max(stamps) if stamps else None
+
+
+def already_pinged(repo, number):
+    """True if we posted a ping on this PR in the last ESCALATE_DAYS.
+
+    Without this the workflow would re-comment every single morning.
+    """
+    comments = api(f"/repos/{repo}/issues/{number}/comments?per_page=100") or []
+    for c in reversed(comments):
+        if PING_MARKER in (c.get("body") or ""):
+            return age_days(parse_ts(c["created_at"])) < ESCALATE_DAYS
+    return False
+
+
+def ping(repo, number, waiting):
+    body = (
+        f"{PING_MARKER}\n"
+        f"⏳ This PR has been open and unreviewed for **{waiting:.0f} days**.\n\n"
+        f"Reviewers, please take a look — or close it if it is no longer needed."
+    )
+    api(f"/repos/{repo}/issues/{number}/comments", method="POST", body={"body": body})
+
+
+def collect(repo):
+    """Return (list_of_pr_dicts, error_string_or_None) for one repo."""
+    try:
+        pulls = api(f"/repos/{repo}/pulls?state=open&per_page=100")
+    except urllib.error.HTTPError as exc:
+        return [], f"HTTP {exc.code}"
+    if pulls is None:
+        return [], "not found / no access"
+
+    out = []
+    for pr in pulls:
+        if pr.get("draft"):
+            continue
+        created = parse_ts(pr["created_at"])
+        reviewed = last_human_review(repo, pr["number"])
+        # "Waiting" = time since the last review, or since it opened if none.
+        waiting = age_days(reviewed or created)
+        reviewers = [u["login"] for u in pr.get("requested_reviewers") or []]
+        out.append(
+            {
+                "repo": repo,
+                "number": pr["number"],
+                "title": pr["title"],
+                "url": pr["html_url"],
+                "author": pr["user"]["login"],
+                "base": pr["base"]["ref"],
+                "age": age_days(created),
+                "waiting": waiting,
+                "reviewed": reviewed is not None,
+                "reviewers": reviewers,
+                "yours": VIEWER in reviewers,
+            }
+        )
+    return out, None
+
+
+def bucket(pr):
+    if pr["waiting"] >= ESCALATE_DAYS:
+        return "escalate"
+    if pr["waiting"] >= STALE_DAYS:
+        return "stale"
+    if pr["waiting"] >= 1:
+        return "warm"
+    return "fresh"
+
+
+BUCKET_META = {
+    "escalate": ("⚫", f"Blocked &gt; {ESCALATE_DAYS} days", "#7c2d12"),
+    "stale": ("🔴", f"Stale &gt; {STALE_DAYS} days", "#b91c1c"),
+    "warm": ("🟡", "Waiting 1–3 days", "#b45309"),
+    "fresh": ("🟢", "Opened in the last 24h", "#15803d"),
+}
+
+
+def esc(text):
+    return (
+        str(text)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+
+def row(pr):
+    you = (
+        ' <span style="background:#1d4ed8;color:#fff;padding:1px 6px;'
+        'border-radius:3px;font-size:11px">YOU</span>'
+        if pr["yours"]
+        else ""
+    )
+    unreviewed = "" if pr["reviewed"] else " · <em>no review yet</em>"
+    reviewers = ", ".join(pr["reviewers"]) or "—"
+    return f"""
+    <tr>
+      <td style="padding:8px 10px;border-bottom:1px solid #e5e7eb">
+        <a href="{pr['url']}" style="color:#1d4ed8;text-decoration:none;font-weight:600">
+          {esc(pr['repo'].split('/')[-1])} #{pr['number']}</a>{you}<br>
+        <span style="color:#111827">{esc(pr['title'])}</span><br>
+        <span style="color:#6b7280;font-size:12px">
+          by {esc(pr['author'])} → {esc(pr['base'])} ·
+          waiting {pr['waiting']:.1f}d · reviewers: {esc(reviewers)}{unreviewed}
+        </span>
+      </td>
+    </tr>"""
+
+
+def build_html(all_prs, quiet_repos, errors):
+    buckets = {k: [] for k in BUCKET_META}
+    for pr in all_prs:
+        buckets[bucket(pr)].append(pr)
+
+    parts = [
+        '<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:760px">',
+        f'<h2 style="margin:0 0 4px">PR review digest</h2>',
+        f'<p style="color:#6b7280;margin:0 0 18px">'
+        f'{NOW.strftime("%A, %d %B %Y")} · {len(all_prs)} open PR(s) across '
+        f'{len(REPOS)} repos</p>',
+    ]
+
+    if not all_prs:
+        parts.append(
+            '<p style="padding:14px;background:#f0fdf4;border-radius:6px">'
+            "✅ Nothing waiting. Every repo is clear.</p>"
+        )
+
+    # Most urgent first — that ordering is the whole point of the digest.
+    for key in ("escalate", "stale", "warm", "fresh"):
+        prs = sorted(buckets[key], key=lambda p: -p["waiting"])
+        if not prs:
+            continue
+        icon, label, color = BUCKET_META[key]
+        parts.append(
+            f'<h3 style="color:{color};margin:20px 0 6px;font-size:15px">'
+            f"{icon} {label} ({len(prs)})</h3>"
+            '<table style="width:100%;border-collapse:collapse;font-size:14px">'
+            + "".join(row(p) for p in prs)
+            + "</table>"
+        )
+
+    if quiet_repos:
+        parts.append(
+            '<p style="color:#6b7280;font-size:12px;margin-top:22px">'
+            "No open PRs: " + ", ".join(esc(r.split("/")[-1]) for r in quiet_repos) + "</p>"
+        )
+
+    if errors:
+        rows = "".join(
+            f"<li>{esc(repo)} — {esc(err)}</li>" for repo, err in errors
+        )
+        parts.append(
+            '<p style="color:#b91c1c;font-size:12px;margin-top:10px">'
+            f"Could not read:<ul>{rows}</ul></p>"
+        )
+
+    parts.append("</div>")
+    return "\n".join(parts)
+
+
+def main():
+    all_prs, quiet_repos, errors = [], [], []
+
+    for repo in REPOS:
+        prs, err = collect(repo)
+        if err:
+            errors.append((repo, err))
+            continue
+        if prs:
+            all_prs.extend(prs)
+        else:
+            quiet_repos.append(repo)
+
+    # Escalation pings — only for PRs past the threshold, once per window.
+    pinged = 0
+    for pr in all_prs:
+        if pr["waiting"] < ESCALATE_DAYS:
+            continue
+        if DRY_RUN:
+            print(f"[dry-run] would ping {pr['repo']}#{pr['number']}")
+            continue
+        if not already_pinged(pr["repo"], pr["number"]):
+            ping(pr["repo"], pr["number"], pr["waiting"])
+            pinged += 1
+
+    html = build_html(all_prs, quiet_repos, errors)
+    with open("digest.html", "w") as fh:
+        fh.write(html)
+
+    stale = sum(1 for p in all_prs if p["waiting"] >= STALE_DAYS)
+    subject = f"PR digest — {len(all_prs)} open"
+    if stale:
+        subject += f", {stale} stale"
+
+    # Surface counts to the workflow so it can decide whether to send.
+    if out := os.environ.get("GITHUB_OUTPUT"):
+        with open(out, "a") as fh:
+            fh.write(f"total={len(all_prs)}\n")
+            fh.write(f"stale={stale}\n")
+            fh.write(f"subject={subject}\n")
+
+    print(f"{len(all_prs)} open PR(s), {stale} stale, {pinged} pinged, "
+          f"{len(errors)} repo error(s)")
+
+    # A repo we cannot read is a broken digest, not a quiet one — fail loudly.
+    return 1 if errors else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

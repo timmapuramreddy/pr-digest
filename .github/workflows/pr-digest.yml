@@ -1,0 +1,47 @@
+name: PR review digest
+
+on:
+  schedule:
+    # 03:30 UTC = 09:00 IST, weekdays only.
+    - cron: "30 3 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build the digest but do not post escalation comments"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build digest
+        id: build
+        env:
+          PR_SCAN_TOKEN: ${{ secrets.PR_SCAN_TOKEN }}
+          VIEWER_LOGIN: timmapuramreddy
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+        run: python scripts/digest.py
+
+      - name: Email digest
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USER }}
+          password: ${{ secrets.MAIL_PASS }}
+          from: PR Digest <${{ secrets.MAIL_USER }}>
+          to: ${{ secrets.MAIL_TO }}
+          subject: ${{ steps.build.outputs.subject }}
+          html_body: file://digest.html
+          convert_markdown: false
