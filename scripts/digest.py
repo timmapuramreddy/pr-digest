@@ -440,6 +440,67 @@ def trend_line(total, stale, prev_total, prev_stale):
     )
 
 
+# Dashboard
+def svg_line(points, width=640, height=170, color="#1d4ed8", label=""):
+    """points: [(label, value)] — a dependency-free inline SVG polyline."""
+    if not points:
+        return "<p style='color:#6b7280'>No data yet.</p>"
+    vals = [v for _, v in points]
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1
+    step = (width - 60) / max(len(points) - 1, 1)
+    coords = [(30 + i * step, 140 - (v - lo) / rng * 110) for i, (_, v) in enumerate(points)]
+    poly = " ".join(f"{x:.1f},{y:.1f}" for x, y in coords)
+    every = max(len(points) // 8, 1)
+    labels = "".join(
+        f'<text x="{30 + i * step:.0f}" y="160" font-size="9" fill="#6b7280" '
+        f'text-anchor="middle">{esc(lbl)}</text>'
+        for i, (lbl, _) in enumerate(points)
+        if i % every == 0
+    )
+    title = f'<text x="30" y="14" font-size="11" fill="#374151">{esc(label)}</text>' if label else ""
+    return (
+        f'<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">'
+        f"{title}<polyline points=\"{poly}\" fill=\"none\" stroke=\"{color}\" "
+        f'stroke-width="2"/>'
+        f'<circle cx="{coords[-1][0]:.1f}" cy="{coords[-1][1]:.1f}" r="3" fill="{color}"/>'
+        f"{labels}</svg>"
+    )
+
+
+def build_dashboard(snapshots, prs_now, first_review_trend):
+    """snapshots: all day files sorted by date. prs_now: today's PR dicts."""
+    days = [(s["date"], len(s.get("prs", []))) for s in snapshots]
+    debt = [
+        (s["date"], sum(1 for p in s.get("prs", []) if p["bucket"] in ("stale", "escalate")))
+        for s in snapshots
+    ]
+    per_repo = {}
+    for p in prs_now:
+        per_repo[p["repo"]] = per_repo.get(p["repo"], 0) + 1
+    repo_rows = "".join(
+        f"<tr><td style='padding:4px 10px'>{esc(r.split('/')[-1])}</td>"
+        f"<td style='padding:4px 10px'><div style='background:#1d4ed8;height:12px;"
+        f"width:{min(n * 30, 400)}px'></div></td><td style='padding:4px 10px'>{n}</td></tr>"
+        for r, n in sorted(per_repo.items(), key=lambda kv: -kv[1])
+    )
+    stuck = sorted(prs_now, key=lambda p: -p["waiting"])[:10]
+    stuck_rows = "".join(
+        f"<li>{esc(p['repo'].split('/')[-1])} #{p['number']} — waiting {p['waiting']:.0f}d</li>"
+        for p in stuck
+        if p["waiting"] >= STALE_DAYS
+    )
+    return f"""<html><head><meta charset="utf-8"><title>PR digest dashboard</title></head>
+<body style="font-family:-apple-system,Segoe UI,sans-serif;max-width:820px;margin:24px auto">
+<h2>PR digest dashboard</h2>
+<h3>Open PRs</h3>{svg_line(days, label="open PRs per day")}
+<h3>Review debt</h3>{svg_line(debt, color="#b91c1c", label="stale + blocked per day")}
+<h3>Per-repo open PRs</h3><table>{repo_rows or '<tr><td>No open PRs</td></tr>'}</table>
+<h3>Median time-to-first-review (rolling week)</h3>{svg_line(first_review_trend, color="#15803d", label="days")}
+<h3>Most stuck (30d view, current)</h3><ul>{stuck_rows or '<li>Nothing stuck</li>'}</ul>
+</body></html>"""
+
+
 def bucket(pr):
     if pr["waiting"] >= ESCALATE_DAYS:
         return "escalate"
@@ -699,6 +760,20 @@ def main():
         stale_now = sum(1 for p in all_prs if p["waiting"] >= STALE_DAYS)
         lw_stale = sum(1 for p in last_week["prs"] if p["bucket"] in ("stale", "escalate"))
         trend = trend_line(len(all_prs), stale_now, len(last_week["prs"]), lw_stale)
+
+    all_snaps = []
+    if cfg.data_dir.exists():
+        for f in sorted((cfg.data_dir / "snapshots").glob("*.json")):
+            all_snaps.append(json.loads(f.read_text()))
+    first_review_trend = []
+    for i in range(len(all_snaps)):
+        window = all_snaps[max(i - 6, 0) : i + 1]
+        firsts, _, _ = collect_durations(window)
+        m = median(firsts.values())
+        if m is not None:
+            first_review_trend.append((all_snaps[i]["date"][5:], round(m, 2)))
+    with open("index.html", "w") as fh:
+        fh.write(build_dashboard(all_snaps, all_prs, first_review_trend))
 
     # Escalation pings — only for PRs past the threshold, once per window.
     pinged = 0

@@ -40,6 +40,12 @@ jobs:
           ref: data
           path: data
 
+      - name: Check out pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: pages
+          path: pages
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -90,6 +96,17 @@ jobs:
           cp "$GITHUB_WORKSPACE/last-sent.json" last-sent.json
           git add last-sent.json
           git diff --cached --quiet || git commit -m "baseline $(date -u '+%F %H:%M')"
+          git push
+
+      - name: Publish dashboard
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.dry_run != 'true' && steps.build.outputs.morning_run == 'true'
+        working-directory: pages
+        run: |
+          git config user.name "pr-digest"
+          git config user.email "actions@users.noreply.github.com"
+          cp "$GITHUB_WORKSPACE/index.html" index.html
+          git add index.html
+          git diff --cached --quiet || git commit -m "dashboard $(date -u +%F)"
           git push
 
       - name: Fail on repo read errors
