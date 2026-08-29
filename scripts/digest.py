@@ -485,7 +485,7 @@ def svg_line(points, width=640, height=170, color="#1d4ed8", label="", empty_msg
 def build_dashboard(snapshots, prs_now, first_review_trend, now=None):
     """snapshots: all day files sorted by date. prs_now: today's PR dicts."""
     total = len(prs_now)
-    stale_now = sum(1 for p in prs_now if p["bucket"] in ("stale", "escalate"))
+    stale_now = sum(1 for p in prs_now if bucket(p) in ("stale", "escalate"))
     if now is not None:
         updated = now.strftime("%A, %d %B %Y %H:%M UTC")
     elif snapshots and snapshots[-1].get("generated_at"):
@@ -824,8 +824,11 @@ def main():
         m = median(firsts.values())
         if m is not None:
             first_review_trend.append((all_snaps[i]["date"][5:], round(m, 2)))
-    with open("index.html", "w") as fh:
-        fh.write(build_dashboard(all_snaps, all_prs, first_review_trend))
+    try:
+        with open("index.html", "w") as fh:
+            fh.write(build_dashboard(all_snaps, all_prs, first_review_trend, now=cfg.now))
+    except Exception as exc:  # noqa: BLE001 — the email must survive a dashboard bug
+        print(f"dashboard generation failed, skipping index.html: {exc!r}")
 
     # Escalation pings — only for PRs past the threshold, once per window.
     pinged = 0

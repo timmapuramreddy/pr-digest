@@ -57,3 +57,9 @@ def test_dashboard_today_counts_reflect_prs_now():
     html = digest.build_dashboard(snaps, prs_now=prs, first_review_trend=[])
     assert "today: 1" in html
     assert "1 stale or blocked" in html
+
+
+def test_dashboard_accepts_collect_shaped_prs():
+    prs = [{"repo": "o/a", "number": 2, "waiting": 5.0}]  # collect() has waiting, no bucket
+    html = digest.build_dashboard([], prs_now=prs, first_review_trend=[])
+    assert "today: 1" in html and "1 stale or blocked" in html
