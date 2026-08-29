@@ -382,6 +382,8 @@ BUCKET_META = {
     "fresh": ("🟢", "Opened in the last 24h", "#15803d"),
 }
 
+BUCKET_ORDER = ["escalate", "stale", "warm", "fresh"]
+
 
 def esc(text):
     return (
@@ -392,20 +394,68 @@ def esc(text):
     )
 
 
-def row(pr):
-    you = (
-        ' <span style="background:#1d4ed8;color:#fff;padding:1px 6px;'
-        'border-radius:3px;font-size:11px">YOU</span>'
-        if pr["yours"]
-        else ""
+def since_yesterday(current_prs, prev_snapshot):
+    """Change summary vs the previous day file. None when there is no baseline."""
+    if prev_snapshot is None:
+        return None
+    prev = {f"{p['repo']}#{p['number']}": p for p in prev_snapshot.get("prs", [])}
+    cur = {f"{p['repo']}#{p['number']}": p for p in current_prs}
+    new = sorted(set(cur) - set(prev))
+    resolved_by_key = {
+        f"{r['repo']}#{r['number']}": r["resolution"]
+        for r in prev_snapshot.get("resolved", [])
+    }
+    reviewed = [
+        k for k in sorted(set(cur) & set(prev))
+        if not prev[k].get("first_review_at") and cur[k].get("first_review_at")
+    ]
+    slipped = [
+        k for k in sorted(set(cur) & set(prev))
+        if BUCKET_ORDER.index(cur[k]["bucket"]) < BUCKET_ORDER.index(prev[k]["bucket"])
+    ]
+    return {
+        "new": new,
+        "reviewed": reviewed,
+        "merged": sum(1 for v in resolved_by_key.values() if v == "merged"),
+        "closed": sum(1 for v in resolved_by_key.values() if v == "closed_unmerged"),
+        "slipped": slipped,
+    }
+
+
+def _badge(label, bg):
+    return (
+        f' <span style="background:{bg};color:#fff;padding:1px 5px;'
+        f'border-radius:3px;font-size:11px">{label}</span>'
     )
-    unreviewed = "" if pr["reviewed"] else " · <em>no review yet</em>"
+
+
+CI_BADGE = {
+    "success": ("CI ✓", "#15803d"),
+    "failure": ("CI ✗", "#b91c1c"),
+    "pending": ("CI …", "#b45309"),
+    "neutral": ("CI –", "#6b7280"),
+}
+
+
+def row(pr):
+    badges = ""
+    if pr["yours"]:
+        badges += _badge("YOU", "#1d4ed8")
+    ci = CI_BADGE.get(pr.get("ci"))
+    if ci:
+        badges += _badge(ci[0], ci[1])
+    badges += _badge(f"+{pr.get('additions', 0)} −{pr.get('deletions', 0)}", "#475569")
+    if pr.get("mergeable") is False:
+        badges += _badge("⚠ conflicts", "#b91c1c")
+    elif pr.get("mergeable") is None:
+        badges += _badge("merge unknown", "#6b7280")
+    unreviewed = "" if pr.get("reviewed", bool(pr.get("first_review_at"))) else " · <em>no review yet</em>"
     reviewers = ", ".join(pr["reviewers"]) or "—"
     return f"""
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #e5e7eb">
         <a href="{pr['url']}" style="color:#1d4ed8;text-decoration:none;font-weight:600">
-          {esc(pr['repo'].split('/')[-1])} #{pr['number']}</a>{you}<br>
+          {esc(pr['repo'].split('/')[-1])} #{pr['number']}</a>{badges}<br>
         <span style="color:#111827">{esc(pr['title'])}</span><br>
         <span style="color:#6b7280;font-size:12px">
           by {esc(pr['author'])} → {esc(pr['base'])} ·
@@ -415,18 +465,53 @@ def row(pr):
     </tr>"""
 
 
-def build_html(cfg, all_prs, quiet_repos, errors):
+def build_html(cfg, all_prs, since, quiet_repos, errors):
     buckets = {k: [] for k in BUCKET_META}
     for pr in all_prs:
         buckets[bucket(pr)].append(pr)
 
+    date_line = (
+        f'{cfg.now.strftime("%A, %d %B %Y")} · {len(all_prs)} open PR(s) across '
+        f'{len(cfg.repos)} repos'
+        if cfg is not None
+        else f'{len(all_prs)} open PR(s)'
+    )
     parts = [
         '<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:760px">',
         f'<h2 style="margin:0 0 4px">PR review digest</h2>',
         f'<p style="color:#6b7280;margin:0 0 18px">'
-        f'{cfg.now.strftime("%A, %d %B %Y")} · {len(all_prs)} open PR(s) across '
-        f'{len(cfg.repos)} repos</p>',
+        f'{date_line}</p>',
     ]
+
+    if since:
+        bits = []
+        if since["new"]:
+            bits.append(f"<b>+{len(since['new'])} new</b>")
+        if since["reviewed"]:
+            bits.append(f"✅ {len(since['reviewed'])} reviewed")
+        if since["merged"]:
+            bits.append(f"🔀 {since['merged']} merged")
+        if since["closed"]:
+            bits.append(f"❌ {since['closed']} closed")
+        if since["slipped"]:
+            bits.append(f"⬇ {len(since['slipped'])} slipped")
+        if bits:
+            parts.append(
+                '<p style="background:#eef2ff;border-radius:6px;padding:10px 14px;'
+                'font-size:13px;margin:0 0 14px">Since yesterday: ' + " · ".join(bits) + "</p>"
+            )
+
+    you_prs = sorted(
+        [p for p in all_prs if waiting_on_you(p)], key=lambda p: -p["waiting"]
+    )
+    if you_prs:
+        parts.append(
+            f'<h3 style="color:#7c2d12;margin:20px 0 6px;font-size:15px">'
+            f"⚡ Waiting on you ({len(you_prs)})</h3>"
+            '<table style="width:100%;border-collapse:collapse;font-size:14px">'
+            + "".join(row(p) for p in you_prs)
+            + "</table>"
+        )
 
     if not all_prs:
         parts.append(
@@ -505,7 +590,8 @@ def main():
             ping(cfg, pr["repo"], pr["number"], pr["waiting"])
             pinged += 1
 
-    html = build_html(cfg, all_prs, quiet_repos, errors)
+    since = since_yesterday(all_prs, prev_snap)
+    html = build_html(cfg, all_prs, since, quiet_repos, errors)
     with open("digest.html", "w") as fh:
         fh.write(html)
 
