@@ -11,9 +11,6 @@ on:
         type: boolean
         default: true
 
-permissions:
-  contents: write
-
 concurrency:
   group: pr-digest
   cancel-in-progress: false
@@ -31,6 +28,8 @@ jobs:
   digest:
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 

@@ -43,7 +43,7 @@ Edit `DEFAULT_REPOS` in `scripts/digest.py`.
 ## One-time setup
 
 ```bash
-git switch --orphan data && mkdir -p snapshots && echo '{}' > last-sent.json
+git switch --orphan data && mkdir -p snapshots && touch snapshots/.gitkeep
 git add . && git commit -m "Seed data branch" && git push -u origin data
 git checkout main
 git switch --orphan pages && echo '<html><title>PR digest</title></html>' > index.html

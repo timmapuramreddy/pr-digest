@@ -16,14 +16,13 @@ def strip_pr(key, **over):
 
 
 def test_since_yesterday_counts():
-    prev = {"prs": [strip_pr("b#1", bucket="warm"), strip_pr("b#2")], "resolved": [
-        {"repo": "o/b", "number": 3, "resolution": "merged", "merged_at": None,
-         "closed_at": None, "created_at": None}
-    ]}
+    prev = {"prs": [strip_pr("b#1", bucket="warm"), strip_pr("b#2")]}
+    resolved = [{"repo": "o/b", "number": 3, "resolution": "merged", "merged_at": None,
+                 "closed_at": None, "created_at": None}]
     cur = [strip_pr("b#1", bucket="stale", waiting=4.0,
                     first_review_at="2026-08-28T10:00:00Z"),
            strip_pr("b#4")]
-    s = digest.since_yesterday(cur, prev)
+    s = digest.since_yesterday(cur, prev, resolved)
     assert s["new"] == ["o/b#4"]
     assert s["reviewed"] == ["o/b#1"]
     assert s["merged"] == 1 and s["closed"] == 0
@@ -31,7 +30,7 @@ def test_since_yesterday_counts():
 
 
 def test_since_yesterday_no_baseline():
-    assert digest.since_yesterday([], None) is None
+    assert digest.since_yesterday([], None, []) is None
 
 
 def test_row_badges_conflict_and_ci():
@@ -49,6 +48,13 @@ def test_row_mergeable_true_has_no_merge_badge():
     assert "merge unknown" not in html and "⚠ conflicts" not in html
 
 
+def test_row_you_reviewed_tick():
+    html = digest.row(strip_pr("b#1", your_last_review_sha="s", head_sha="s"))
+    assert "you reviewed" in html
+    html2 = digest.row(strip_pr("b#1", your_last_review_sha="old", head_sha="s"))
+    assert "you reviewed" not in html2
+
+
 def test_build_html_has_waiting_on_you_first():
     prs = [strip_pr("b#1", yours=True, your_last_review_sha=None, waiting=2.0),
            strip_pr("b#2", waiting=4.0, bucket="stale")]
@@ -59,13 +65,13 @@ def test_build_html_has_waiting_on_you_first():
 
 
 def test_since_yesterday_with_collect_shaped_prs():
-    prev = {"prs": [strip_pr("b#1", bucket="warm")], "resolved": []}
+    prev = {"prs": [strip_pr("b#1", bucket="warm")]}
     cur = [strip_pr("b#1")]
     del cur[0]["bucket"]  # collect() output has waiting, not bucket
-    s = digest.since_yesterday(cur, prev)
+    s = digest.since_yesterday(cur, prev, [])
     assert s["slipped"] == []
     cur[0]["waiting"] = 4.0  # warm → stale once bucket() computes it
-    s = digest.since_yesterday(cur, prev)
+    s = digest.since_yesterday(cur, prev, [])
     assert s["slipped"] == ["o/b#1"]
 
 
@@ -90,3 +96,11 @@ def test_no_dashboard_link_without_url():
     prs = [strip_pr("b#1")]
     html = digest.build_html(make_cfg_for_render(dashboard_url=""), prs, None, None, None, [], [])
     assert "Review-debt dashboard" not in html
+
+
+def test_no_all_clear_when_repo_errors():
+    html = digest.build_html(
+        make_cfg_for_render(dashboard_url=""), [], None, None, None, [],
+        [("o/x", "HTTP 401")]
+    )
+    assert "Nothing waiting" not in html and "HTTP 401" in html

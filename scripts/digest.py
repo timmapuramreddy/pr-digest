@@ -166,6 +166,8 @@ def collect(cfg, repo):
         pulls = api(cfg, f"/repos/{repo}/pulls?state=open&per_page=100")
     except urllib.error.HTTPError as exc:
         return [], f"HTTP {exc.code}"
+    except urllib.error.URLError as exc:
+        return [], f"network error: {exc.reason}"
     if pulls is None:
         return [], "not found / no access"
 
@@ -182,6 +184,8 @@ def collect(cfg, repo):
             checks = api(cfg, f"/repos/{repo}/commits/{sha}/check-runs?per_page=100")
         except urllib.error.HTTPError as exc:
             return [], f"HTTP {exc.code} on PR {number}"
+        except urllib.error.URLError as exc:
+            return [], f"network error on PR {number}: {exc.reason}"
         fields = extract_review_fields(reviews, cfg.viewer)
         reviewed = fields["last_review_at"] is not None
         waiting = age_days(cfg, parse_ts(fields["last_review_at"]) if reviewed else created)
@@ -352,7 +356,10 @@ def resolve_disappeared(cfg, prev_snapshot, current_keys):
         key = f"{p['repo']}#{p['number']}"
         if key in current_keys:
             continue
-        d = api(cfg, f"/repos/{p['repo']}/pulls/{p['number']}") or {}
+        try:
+            d = api(cfg, f"/repos/{p['repo']}/pulls/{p['number']}") or {}
+        except (urllib.error.HTTPError, urllib.error.URLError):
+            continue
         merged = bool(d.get("merged"))
         out.append(
             {
@@ -532,17 +539,13 @@ def esc(text):
     )
 
 
-def since_yesterday(current_prs, prev_snapshot):
+def since_yesterday(current_prs, prev_snapshot, resolved):
     """Change summary vs the previous day file. None when there is no baseline."""
     if prev_snapshot is None:
         return None
     prev = {f"{p['repo']}#{p['number']}": p for p in prev_snapshot.get("prs", [])}
     cur = {f"{p['repo']}#{p['number']}": p for p in current_prs}
     new = sorted(set(cur) - set(prev))
-    resolved_by_key = {
-        f"{r['repo']}#{r['number']}": r["resolution"]
-        for r in prev_snapshot.get("resolved", [])
-    }
     reviewed = [
         k for k in sorted(set(cur) & set(prev))
         if not prev[k].get("first_review_at") and cur[k].get("first_review_at")
@@ -554,8 +557,8 @@ def since_yesterday(current_prs, prev_snapshot):
     return {
         "new": new,
         "reviewed": reviewed,
-        "merged": sum(1 for v in resolved_by_key.values() if v == "merged"),
-        "closed": sum(1 for v in resolved_by_key.values() if v == "closed_unmerged"),
+        "merged": sum(1 for r in resolved if r["resolution"] == "merged"),
+        "closed": sum(1 for r in resolved if r["resolution"] == "closed_unmerged"),
         "slipped": slipped,
     }
 
@@ -589,6 +592,13 @@ def row(pr):
         badges += _badge("merge unknown", "#6b7280")
     unreviewed = "" if pr.get("reviewed", bool(pr.get("first_review_at"))) else " · <em>no review yet</em>"
     reviewers = ", ".join(pr["reviewers"]) or "—"
+    you_reviewed_tick = (
+        " · <span style=\"color:#15803d\">✓ you reviewed</span>"
+        if pr.get("your_last_review_sha")
+        and pr.get("head_sha")
+        and pr["your_last_review_sha"] == pr["head_sha"]
+        else ""
+    )
     return f"""
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #e5e7eb">
@@ -597,7 +607,7 @@ def row(pr):
         <span style="color:#111827">{esc(pr['title'])}</span><br>
         <span style="color:#6b7280;font-size:12px">
           by {esc(pr['author'])} → {esc(pr['base'])} ·
-          waiting {pr['waiting']:.1f}d · reviewers: {esc(reviewers)}{unreviewed}
+          waiting {pr['waiting']:.1f}d · reviewers: {esc(reviewers)}{you_reviewed_tick}{unreviewed}
         </span>
       </td>
     </tr>"""
@@ -641,11 +651,6 @@ def build_html(
                 'font-size:13px;margin:0 0 14px">Since yesterday: ' + " · ".join(bits) + "</p>"
             )
 
-    if trend:
-        parts.append(
-            '<p style="color:#374151;font-size:13px;margin:0 0 10px">📈 ' + trend + "</p>"
-        )
-
     you_prs = sorted(
         [p for p in all_prs if waiting_on_you(p)], key=lambda p: -p["waiting"]
     )
@@ -658,7 +663,7 @@ def build_html(
             + "</table>"
         )
 
-    if not all_prs:
+    if not all_prs and not errors:
         parts.append(
             '<p style="padding:14px;background:#f0fdf4;border-radius:6px">'
             "✅ Nothing waiting. Every repo is clear.</p>"
@@ -678,25 +683,9 @@ def build_html(
             + "</table>"
         )
 
-    if cfg.dashboard_url:
+    if trend:
         parts.append(
-            f'<p style="font-size:13px;margin-top:22px">📈 <a href="{esc(cfg.dashboard_url)}" '
-            f'style="color:#1d4ed8">Review-debt dashboard</a></p>'
-        )
-
-    if quiet_repos:
-        parts.append(
-            '<p style="color:#6b7280;font-size:12px;margin-top:22px">'
-            "No open PRs: " + ", ".join(esc(r.split("/")[-1]) for r in quiet_repos) + "</p>"
-        )
-
-    if errors:
-        rows = "".join(
-            f"<li>{esc(repo)} — {esc(err)}</li>" for repo, err in errors
-        )
-        parts.append(
-            '<p style="color:#b91c1c;font-size:12px;margin-top:10px">'
-            f"Could not read:<ul>{rows}</ul></p>"
+            '<p style="color:#374151;font-size:13px;margin:0 0 10px">📈 ' + trend + "</p>"
         )
 
     if (
@@ -719,6 +708,27 @@ def build_html(
         parts.append(
             '<p style="background:#fffbeb;border-radius:6px;padding:10px 14px;'
             f'font-size:13px;margin:20px 0 0"><b>This week</b> — {summary}</p>'
+        )
+
+    if cfg.dashboard_url:
+        parts.append(
+            f'<p style="font-size:13px;margin-top:22px">📈 <a href="{esc(cfg.dashboard_url)}" '
+            f'style="color:#1d4ed8">Review-debt dashboard</a></p>'
+        )
+
+    if quiet_repos:
+        parts.append(
+            '<p style="color:#6b7280;font-size:12px;margin-top:22px">'
+            "No open PRs: " + ", ".join(esc(r.split("/")[-1]) for r in quiet_repos) + "</p>"
+        )
+
+    if errors:
+        rows = "".join(
+            f"<li>{esc(repo)} — {esc(err)}</li>" for repo, err in errors
+        )
+        parts.append(
+            '<p style="color:#b91c1c;font-size:12px;margin-top:10px">'
+            f"Could not read:<ul>{rows}</ul></p>"
         )
 
     parts.append("</div>")
@@ -754,8 +764,9 @@ def main():
     week_snaps = [
         s for s in (read_snapshot(cfg, cfg.now.date() - _timedelta(days=o))
                     for o in range(0, 7))
-        if s is not None
+        if s is not None and s.get("date") != snapshot["date"]
     ]
+    week_snaps.append(snapshot)
     prior_snaps = [
         s for s in (read_snapshot(cfg, cfg.now.date() - _timedelta(days=o))
                     for o in range(7, 14))
@@ -773,6 +784,8 @@ def main():
     if cfg.data_dir.exists():
         for f in sorted((cfg.data_dir / "snapshots").glob("*.json")):
             all_snaps.append(json.loads(f.read_text()))
+    all_snaps = [s for s in all_snaps if s.get("date") != snapshot["date"]]
+    all_snaps.append(snapshot)
     first_review_trend = []
     for i in range(len(all_snaps)):
         window = all_snaps[max(i - 6, 0) : i + 1]
@@ -791,11 +804,14 @@ def main():
         if cfg.dry_run:
             print(f"[dry-run] would ping {pr['repo']}#{pr['number']}")
             continue
-        if not already_pinged(cfg, pr["repo"], pr["number"]):
-            ping(cfg, pr["repo"], pr["number"], pr["waiting"])
-            pinged += 1
+        try:
+            if not already_pinged(cfg, pr["repo"], pr["number"]):
+                ping(cfg, pr["repo"], pr["number"], pr["waiting"])
+                pinged += 1
+        except (urllib.error.HTTPError, urllib.error.URLError) as exc:
+            print(f"ping failed for {pr['repo']}#{pr['number']}: {exc}")
 
-    since = since_yesterday(all_prs, prev_snap)
+    since = since_yesterday(all_prs, prev_snap, resolved)
     html = build_html(cfg, all_prs, since, trend, stats, quiet_repos, errors)
     with open("digest.html", "w") as fh:
         fh.write(html)

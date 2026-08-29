@@ -6,3 +6,4 @@ snapshot.json
 last-sent.json
 index.html
 tmp-data/
+.venv/
