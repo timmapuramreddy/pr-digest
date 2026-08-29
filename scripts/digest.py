@@ -122,7 +122,7 @@ def extract_review_fields(reviews, viewer):
         }
     first = min(stamped, key=lambda r: parse_ts(r["submitted_at"]))
     last = max(stamped, key=lambda r: parse_ts(r["submitted_at"]))
-    mine = [r for r in stamped if r.get("user", {}).get("login") == viewer]
+    mine = [r for r in stamped if (r.get("user") or {}).get("login") == viewer]
     my_last = max(mine, key=lambda r: parse_ts(r["submitted_at"])) if mine else None
     return {
         "first_review_at": first["submitted_at"],

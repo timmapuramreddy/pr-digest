@@ -44,3 +44,13 @@ def test_ci_failure():
 def test_ci_success():
     payload = {"check_runs": [{"status": "completed", "conclusion": "success"}]}
     assert digest.ci_status(payload) == "success"
+
+
+def test_review_fields_deleted_author_user_null():
+    reviews = [
+        {"user": None, "submitted_at": "2026-08-20T10:00:00Z", "commit_id": "s0"},
+        REVIEW("me", "2026-08-22T10:00:00Z", "s3"),
+    ]
+    f = digest.extract_review_fields(reviews, "me")
+    assert f["your_last_review_sha"] == "s3"
+    assert f["first_review_at"] == "2026-08-20T10:00:00Z"
