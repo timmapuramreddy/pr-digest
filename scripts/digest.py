@@ -214,8 +214,19 @@ def pr_key(pr):
 
 
 def waiting_on_you(pr):
-    """Placeholder until Task 4 wires the real predicate (needs fetch fields)."""
-    return pr["yours"]
+    """True when the viewer should act: he is a requested reviewer, or nobody
+    is assigned, and the current head is not the commit he already reviewed.
+
+    GitHub removes a reviewer from requested_reviewers the moment they
+    review — comparing commit ids is what keeps this queue alive after the
+    author pushes fixes to a changes-requested review.
+    """
+    involved = pr["yours"] or not pr["reviewers"]
+    already_handled = (
+        pr["your_last_review_sha"] is not None
+        and pr["your_last_review_sha"] == pr["head_sha"]
+    )
+    return involved and not already_handled
 
 
 def state_for_baseline(all_prs, errors):
