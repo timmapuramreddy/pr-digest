@@ -106,6 +106,58 @@ def ping(cfg, repo, number, waiting):
     api(cfg, f"/repos/{repo}/issues/{number}/comments", method="POST", body={"body": body})
 
 
+def extract_review_fields(reviews, viewer):
+    """First/last review timestamps and the viewer's last review sha.
+
+    The review payload carries commit_id — the sha the review was made on —
+    which is what lets the waiting-on-you queue survive re-reviews.
+    """
+    stamped = [r for r in reviews if r.get("submitted_at")]
+    if not stamped:
+        return {
+            "first_review_at": None,
+            "last_review_at": None,
+            "your_last_review_at": None,
+            "your_last_review_sha": None,
+        }
+    first = min(stamped, key=lambda r: parse_ts(r["submitted_at"]))
+    last = max(stamped, key=lambda r: parse_ts(r["submitted_at"]))
+    mine = [r for r in stamped if r.get("user", {}).get("login") == viewer]
+    my_last = max(mine, key=lambda r: parse_ts(r["submitted_at"])) if mine else None
+    return {
+        "first_review_at": first["submitted_at"],
+        "last_review_at": last["submitted_at"],
+        "your_last_review_at": my_last["submitted_at"] if my_last else None,
+        "your_last_review_sha": my_last.get("commit_id") if my_last else None,
+    }
+
+
+def ci_status(check_runs_payload):
+    """Roll a check-runs payload up to none/pending/success/failure/neutral."""
+    runs = (check_runs_payload or {}).get("check_runs") or []
+    if not runs:
+        return "none"
+    if any(r.get("status") != "completed" for r in runs):
+        return "pending"
+    bad = {"failure", "timed_out", "startup_failure", "action_required", "stale"}
+    conclusions = {r.get("conclusion") for r in runs}
+    if conclusions & bad:
+        return "failure"
+    if "success" in conclusions:
+        return "success"
+    return "neutral"
+
+
+def pr_detail(cfg, repo, number):
+    """Size + mergeability. mergeable is None while GitHub computes it."""
+    d = api(cfg, f"/repos/{repo}/pulls/{number}") or {}
+    return {
+        "additions": d.get("additions", 0),
+        "deletions": d.get("deletions", 0),
+        "mergeable": d.get("mergeable"),
+    }
+
+
 def collect(cfg, repo):
     """Return (list_of_pr_dicts, error_string_or_None) for one repo."""
     try:
@@ -119,38 +171,42 @@ def collect(cfg, repo):
     for pr in pulls:
         if pr.get("draft"):
             continue
+        number = pr["number"]
         created = parse_ts(pr["created_at"])
-        reviewed = last_human_review(cfg, repo, pr["number"])
-        # "Waiting" = time since the last review, or since it opened if none.
-        waiting = age_days(cfg, reviewed or created)
+        sha = pr["head"]["sha"]
+        try:
+            reviews = api(cfg, f"/repos/{repo}/pulls/{number}/reviews?per_page=100") or []
+            detail = pr_detail(cfg, repo, number)
+            checks = api(cfg, f"/repos/{repo}/commits/{sha}/check-runs?per_page=100")
+        except urllib.error.HTTPError as exc:
+            return [], f"HTTP {exc.code} on PR {number}"
+        fields = extract_review_fields(reviews, cfg.viewer)
+        reviewed = fields["last_review_at"] is not None
+        waiting = age_days(cfg, parse_ts(fields["last_review_at"]) if reviewed else created)
         reviewers = [u["login"] for u in pr.get("requested_reviewers") or []]
         out.append(
             {
                 "repo": repo,
-                "number": pr["number"],
+                "number": number,
                 "title": pr["title"],
                 "url": pr["html_url"],
                 "author": pr["user"]["login"],
                 "base": pr["base"]["ref"],
+                "head_sha": sha,
+                "created_at": pr["created_at"],
                 "age": age_days(cfg, created),
                 "waiting": waiting,
-                "reviewed": reviewed is not None,
+                "reviewed": reviewed,
+                **fields,
                 "reviewers": reviewers,
                 "yours": cfg.viewer in reviewers,
+                "ci": ci_status(checks),
+                "additions": detail["additions"],
+                "deletions": detail["deletions"],
+                "mergeable": detail["mergeable"],
             }
         )
     return out, None
-
-
-def last_human_review(cfg, repo, number):
-    """Most recent review timestamp from someone other than the PR author.
-
-    Returns None when nobody has reviewed yet — that is the case we most
-    want to surface.
-    """
-    reviews = api(cfg, f"/repos/{repo}/pulls/{number}/reviews?per_page=100") or []
-    stamps = [parse_ts(r["submitted_at"]) for r in reviews if r.get("submitted_at")]
-    return max(stamps) if stamps else None
 
 
 def pr_key(pr):
