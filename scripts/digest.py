@@ -365,6 +365,81 @@ def resolve_disappeared(cfg, prev_snapshot, current_keys):
     return out
 
 
+# Trends
+def median(values):
+    vals = sorted(values)
+    if not vals:
+        return None
+    n = len(vals)
+    mid = n // 2
+    return vals[mid] if n % 2 else (vals[mid - 1] + vals[mid]) / 2
+
+
+def _days_between(iso_start, iso_end):
+    if not iso_start or not iso_end:
+        return None
+    return (parse_ts(iso_end) - parse_ts(iso_start)).total_seconds() / 86400
+
+
+def collect_durations(snapshots):
+    """Dedupe PRs across snapshots; earliest observed duration wins.
+
+    first_review_at is stable once set, so repeated observations of the same
+    PR should agree — min() just absorbs clock/scheduling skew.
+    """
+    firsts, mine, merges = {}, {}, {}
+    for snap in snapshots:
+        for p in snap.get("prs", []):
+            key = f"{p['repo']}#{p['number']}"
+            d = _days_between(p.get("created_at"), p.get("first_review_at"))
+            if d is not None:
+                firsts[key] = min(firsts.get(key, 1e9), d)
+            d = _days_between(p.get("created_at"), p.get("your_last_review_at"))
+            if d is not None:
+                mine[key] = min(mine.get(key, 1e9), d)
+        for r in snap.get("resolved", []):
+            if r.get("resolution") != "merged":
+                continue
+            key = f"{r['repo']}#{r['number']}"
+            d = _days_between(r.get("created_at"), r.get("merged_at"))
+            if d is not None:
+                merges[key] = min(merges.get(key, 1e9), d)
+    return firsts, mine, merges
+
+
+def weekly_stats(this_week_snaps, prior_week_snaps):
+    firsts, mine, merges = collect_durations(this_week_snaps)
+    stats = {
+        "first_review": median(firsts.values()),
+        "your_review": median(mine.values()),
+        "merge": median(merges.values()),
+        "prior_first_review": None,
+        "prior_your_review": None,
+        "prior_merge": None,
+    }
+    if prior_week_snaps:
+        p_firsts, p_mine, p_merges = collect_durations(prior_week_snaps)
+        stats["prior_first_review"] = median(p_firsts.values())
+        stats["prior_your_review"] = median(p_mine.values())
+        stats["prior_merge"] = median(p_merges.values())
+    return stats
+
+
+def _arrow(now, before):
+    if now > before:
+        return "▲"
+    if now < before:
+        return "▼"
+    return "–"
+
+
+def trend_line(total, stale, prev_total, prev_stale):
+    return (
+        f"open {_arrow(total, prev_total)} {total} (was {prev_total}) · "
+        f"stale {_arrow(stale, prev_stale)} {stale} (was {prev_stale})"
+    )
+
+
 def bucket(pr):
     if pr["waiting"] >= ESCALATE_DAYS:
         return "escalate"
@@ -465,7 +540,9 @@ def row(pr):
     </tr>"""
 
 
-def build_html(cfg, all_prs, since, quiet_repos, errors):
+def build_html(
+    cfg, all_prs, since, trend=None, stats=None, quiet_repos=None, errors=None
+):
     buckets = {k: [] for k in BUCKET_META}
     for pr in all_prs:
         buckets[bucket(pr)].append(pr)
@@ -500,6 +577,11 @@ def build_html(cfg, all_prs, since, quiet_repos, errors):
                 '<p style="background:#eef2ff;border-radius:6px;padding:10px 14px;'
                 'font-size:13px;margin:0 0 14px">Since yesterday: ' + " · ".join(bits) + "</p>"
             )
+
+    if trend:
+        parts.append(
+            '<p style="color:#374151;font-size:13px;margin:0 0 10px">📈 ' + trend + "</p>"
+        )
 
     you_prs = sorted(
         [p for p in all_prs if waiting_on_you(p)], key=lambda p: -p["waiting"]
@@ -548,6 +630,28 @@ def build_html(cfg, all_prs, since, quiet_repos, errors):
             f"Could not read:<ul>{rows}</ul></p>"
         )
 
+    if (
+        cfg is not None
+        and cfg.now.weekday() == 4
+        and stats
+        and stats.get("first_review") is not None
+    ):
+        def _fmt(label, val, prior):
+            if val is None:
+                return ""
+            extra = f" (prior week {prior:.1f}d)" if prior is not None else ""
+            return f"{label} {val:.1f}d{extra} · "
+
+        summary = (
+            _fmt("time-to-first-review", stats.get("first_review"), stats.get("prior_first_review"))
+            + _fmt("time-to-my-review", stats.get("your_review"), stats.get("prior_your_review"))
+            + _fmt("time-to-merge", stats.get("merge"), stats.get("prior_merge"))
+        ).rstrip(" ·")
+        parts.append(
+            '<p style="background:#fffbeb;border-radius:6px;padding:10px 14px;'
+            f'font-size:13px;margin:20px 0 0"><b>This week</b> — {summary}</p>'
+        )
+
     parts.append("</div>")
     return "\n".join(parts)
 
@@ -578,6 +682,24 @@ def main():
     with open("snapshot.json", "w") as fh:
         json.dump(snapshot, fh, indent=1)
 
+    week_snaps = [
+        s for s in (read_snapshot(cfg, cfg.now.date() - _timedelta(days=o))
+                    for o in range(0, 7))
+        if s is not None
+    ]
+    prior_snaps = [
+        s for s in (read_snapshot(cfg, cfg.now.date() - _timedelta(days=o))
+                    for o in range(7, 14))
+        if s is not None
+    ]
+    stats = weekly_stats(week_snaps, prior_snaps)
+    last_week = read_snapshot(cfg, cfg.now.date() - _timedelta(days=7))
+    trend = None
+    if last_week is not None:
+        stale_now = sum(1 for p in all_prs if p["waiting"] >= STALE_DAYS)
+        lw_stale = sum(1 for p in last_week["prs"] if p["bucket"] in ("stale", "escalate"))
+        trend = trend_line(len(all_prs), stale_now, len(last_week["prs"]), lw_stale)
+
     # Escalation pings — only for PRs past the threshold, once per window.
     pinged = 0
     for pr in all_prs:
@@ -591,7 +713,7 @@ def main():
             pinged += 1
 
     since = since_yesterday(all_prs, prev_snap)
-    html = build_html(cfg, all_prs, since, quiet_repos, errors)
+    html = build_html(cfg, all_prs, since, trend, stats, quiet_repos, errors)
     with open("digest.html", "w") as fh:
         fh.write(html)
 
