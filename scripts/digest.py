@@ -153,6 +153,64 @@ def last_human_review(cfg, repo, number):
     return max(stamps) if stamps else None
 
 
+def pr_key(pr):
+    return f"{pr['repo']}#{pr['number']}"
+
+
+def waiting_on_you(pr):
+    """Placeholder until Task 4 wires the real predicate (needs fetch fields)."""
+    return pr["yours"]
+
+
+def state_for_baseline(all_prs, errors):
+    """Minimal per-PR state used to decide whether the next run changed anything."""
+    return {
+        "prs": [
+            {
+                "key": pr_key(p),
+                "bucket": bucket(p),
+                "you_queue": waiting_on_you(p),
+            }
+            for p in all_prs
+        ],
+        "errors": bool(errors),
+    }
+
+
+def diff_state(current, baseline):
+    """Return (changed, reason) comparing current state with the last-sent baseline."""
+    if baseline is None:
+        return True, "no baseline (first run)"
+    cur = {p["key"]: p for p in current["prs"]}
+    prev = {p["key"]: p for p in baseline.get("prs", [])}
+    if set(cur) != set(prev):
+        gained = sorted(set(cur) - set(prev))
+        lost = sorted(set(prev) - set(cur))
+        return True, f"pr set changed (+{gained} -{lost})"
+    for key in sorted(cur):
+        if cur[key]["bucket"] != prev[key]["bucket"]:
+            return True, f"{key} moved {prev[key]['bucket']} → {cur[key]['bucket']}"
+        if cur[key].get("you_queue") and not prev[key].get("you_queue"):
+            return True, f"{key} is now waiting on you"
+    if current.get("errors"):
+        return True, "repo read error"
+    return False, "no change"
+
+
+def should_send(cfg, current, baseline):
+    """Morning run always sends; other runs send only on change."""
+    if cfg.now.hour == 3:
+        return True, "morning run"
+    return diff_state(current, baseline)
+
+
+def read_baseline(cfg):
+    path = cfg.data_dir / "last-sent.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text())
+
+
 def bucket(pr):
     if pr["waiting"] >= ESCALATE_DAYS:
         return "escalate"
@@ -269,6 +327,11 @@ def main():
         else:
             quiet_repos.append(repo)
 
+    baseline = read_baseline(cfg)
+    current = state_for_baseline(all_prs, errors)
+    send, reason = should_send(cfg, current, baseline)
+    print(f"send={send} ({reason})")
+
     # Escalation pings — only for PRs past the threshold, once per window.
     pinged = 0
     for pr in all_prs:
@@ -285,6 +348,9 @@ def main():
     with open("digest.html", "w") as fh:
         fh.write(html)
 
+    with open("last-sent.json", "w") as fh:
+        json.dump({**current, "sent_at": cfg.now.isoformat()}, fh, indent=1)
+
     stale = sum(1 for p in all_prs if p["waiting"] >= STALE_DAYS)
     subject = f"PR digest — {len(all_prs)} open"
     if stale:
@@ -298,6 +364,8 @@ def main():
             fh.write(f"subject={subject}\n")
             fh.write(f"errors={'true' if errors else 'false'}\n")
             fh.write(f"dry_run={'true' if cfg.dry_run else 'false'}\n")
+            fh.write(f"morning_run={'true' if cfg.now.hour == 3 else 'false'}\n")
+            fh.write(f"should_send={'true' if send else 'false'}\n")
 
     print(f"{len(all_prs)} open PR(s), {stale} stale, {pinged} pinged, "
           f"{len(errors)} repo error(s)")
