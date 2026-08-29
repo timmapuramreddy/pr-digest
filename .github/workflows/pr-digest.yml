@@ -67,7 +67,7 @@ jobs:
 
       - name: Email digest
         id: mail
-        if: always() && steps.build.outcome == 'success' && steps.build.outputs.should_send == 'true'
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.should_send == 'true' && steps.build.outputs.dry_run != 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -89,7 +89,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
           cp "$GITHUB_WORKSPACE/last-sent.json" last-sent.json
           git add last-sent.json
-          git diff --cached --quiet || git commit -m "baseline $(date -u +%F %H:%M)"
+          git diff --cached --quiet || git commit -m "baseline $(date -u '+%F %H:%M')"
           git push
 
       - name: Fail on repo read errors
