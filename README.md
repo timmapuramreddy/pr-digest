@@ -54,6 +54,10 @@ git checkout main
 Then go to repo **Settings → Pages → Deploy from branch** and select `pages` /
 `/ (root)`.
 
+Optional: after Pages is live, add a `DASHBOARD_URL` repository variable (or
+secret-free env in the workflow) set to the Pages URL, and the email footer
+links to the dashboard.
+
 ## Secrets required
 
 | Secret | What |

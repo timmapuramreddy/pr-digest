@@ -52,7 +52,9 @@ def test_row_mergeable_true_has_no_merge_badge():
 def test_build_html_has_waiting_on_you_first():
     prs = [strip_pr("b#1", yours=True, your_last_review_sha=None, waiting=2.0),
            strip_pr("b#2", waiting=4.0, bucket="stale")]
-    html = digest.build_html(None, prs, [], [], None)
+    html = digest.build_html(
+        make_cfg_for_render(dashboard_url=""), prs, [], [], None, [], []
+    )
     assert html.index("Waiting on you") < html.index("Stale")
 
 
@@ -65,3 +67,26 @@ def test_since_yesterday_with_collect_shaped_prs():
     cur[0]["waiting"] = 4.0  # warm → stale once bucket() computes it
     s = digest.since_yesterday(cur, prev)
     assert s["slipped"] == ["o/b#1"]
+
+
+def make_cfg_for_render(**over):
+    from datetime import datetime, timezone
+    base = dict(
+        token="t", viewer="me", dry_run=True, repos=["o/a"],
+        data_dir=None, dashboard_url="https://ex.github.io/pr-digest/",
+        now=datetime(2026, 8, 28, 5, 30, tzinfo=timezone.utc),  # a Friday
+    )
+    base.update(over)
+    return digest.Config(**base)
+
+
+def test_dashboard_link_in_footer_when_configured():
+    prs = [strip_pr("b#1")]
+    html = digest.build_html(make_cfg_for_render(), prs, None, None, None, [], [])
+    assert "Review-debt dashboard" in html and "https://ex.github.io/pr-digest/" in html
+
+
+def test_no_dashboard_link_without_url():
+    prs = [strip_pr("b#1")]
+    html = digest.build_html(make_cfg_for_render(dashboard_url=""), prs, None, None, None, [], [])
+    assert "Review-debt dashboard" not in html

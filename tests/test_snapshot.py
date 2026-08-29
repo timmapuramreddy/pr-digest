@@ -8,6 +8,7 @@ def make_cfg(tmp_path):
     return digest.Config(
         token="t", viewer="me", dry_run=True, repos=["a/b"],
         data_dir=tmp_path,
+        dashboard_url="",
         now=datetime(2026, 8, 29, 5, 30, tzinfo=timezone.utc),
     )
 

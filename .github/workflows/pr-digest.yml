@@ -57,6 +57,7 @@ jobs:
           VIEWER_LOGIN: timmapuramreddy
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
           DATA_DIR: data
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
         run: python scripts/digest.py
 
       - name: Push daily snapshot

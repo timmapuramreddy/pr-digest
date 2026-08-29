@@ -10,6 +10,7 @@ def make_cfg(now_hour=5):
         dry_run=True,
         repos=["a/b"],
         data_dir=None,
+        dashboard_url="",
         now=datetime(2026, 8, 29, now_hour, 30, tzinfo=timezone.utc),
     )
 

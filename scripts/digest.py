@@ -46,6 +46,7 @@ class Config:
     dry_run: bool
     repos: list
     data_dir: Path
+    dashboard_url: str
     now: datetime
 
 
@@ -57,6 +58,7 @@ def load_config(now=None):
         dry_run=os.environ.get("DRY_RUN", "false").lower() == "true",
         repos=list(DEFAULT_REPOS),
         data_dir=Path(os.environ.get("DATA_DIR", "data")),
+        dashboard_url=os.environ.get("DASHBOARD_URL", ""),
         now=now or datetime.now(timezone.utc),
     )
 
@@ -674,6 +676,12 @@ def build_html(
             '<table style="width:100%;border-collapse:collapse;font-size:14px">'
             + "".join(row(p) for p in prs)
             + "</table>"
+        )
+
+    if cfg.dashboard_url:
+        parts.append(
+            f'<p style="font-size:13px;margin-top:22px">📈 <a href="{esc(cfg.dashboard_url)}" '
+            f'style="color:#1d4ed8">Review-debt dashboard</a></p>'
         )
 
     if quiet_repos:
