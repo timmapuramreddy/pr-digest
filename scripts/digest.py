@@ -450,10 +450,10 @@ def trend_line(total, stale, prev_total, prev_stale):
 
 
 # Dashboard
-def svg_line(points, width=640, height=170, color="#1d4ed8", label=""):
+def svg_line(points, width=640, height=170, color="#1d4ed8", label="", empty_msg="No data yet."):
     """points: [(label, value)] — a dependency-free inline SVG polyline."""
     if not points:
-        return "<p style='color:#6b7280'>No data yet.</p>"
+        return f"<p style='color:#6b7280'>{esc(empty_msg)}</p>"
     vals = [v for _, v in points]
     lo, hi = min(vals), max(vals)
     rng = (hi - lo) or 1
@@ -468,17 +468,30 @@ def svg_line(points, width=640, height=170, color="#1d4ed8", label=""):
         if i % every == 0
     )
     title = f'<text x="30" y="14" font-size="11" fill="#374151">{esc(label)}</text>' if label else ""
+    value = (
+        f'<text x="{min(coords[-1][0] + 7, width - 26):.1f}" '
+        f'y="{max(coords[-1][1] - 8, 12):.1f}" font-size="12" font-weight="bold" '
+        f'fill="{color}">{esc(f"{vals[-1]:g}")}</text>'
+    )
     return (
         f'<svg width="{width}" height="{height}" xmlns="http://www.w3.org/2000/svg">'
         f"{title}<polyline points=\"{poly}\" fill=\"none\" stroke=\"{color}\" "
         f'stroke-width="2"/>'
         f'<circle cx="{coords[-1][0]:.1f}" cy="{coords[-1][1]:.1f}" r="3" fill="{color}"/>'
-        f"{labels}</svg>"
+        f"{value}{labels}</svg>"
     )
 
 
-def build_dashboard(snapshots, prs_now, first_review_trend):
+def build_dashboard(snapshots, prs_now, first_review_trend, now=None):
     """snapshots: all day files sorted by date. prs_now: today's PR dicts."""
+    total = len(prs_now)
+    stale_now = sum(1 for p in prs_now if p["bucket"] in ("stale", "escalate"))
+    if now is not None:
+        updated = now.strftime("%A, %d %B %Y %H:%M UTC")
+    elif snapshots and snapshots[-1].get("generated_at"):
+        updated = snapshots[-1]["generated_at"]
+    else:
+        updated = "unknown"
     days = [(s["date"], len(s.get("prs", []))) for s in snapshots]
     debt = [
         (s["date"], sum(1 for p in s.get("prs", []) if p["bucket"] in ("stale", "escalate")))
@@ -499,14 +512,32 @@ def build_dashboard(snapshots, prs_now, first_review_trend):
         for p in stuck
         if p["waiting"] >= STALE_DAYS
     )
+    debt_word = "healthy" if stale_now == 0 else "needs attention"
     return f"""<html><head><meta charset="utf-8"><title>PR digest dashboard</title></head>
 <body style="font-family:-apple-system,Segoe UI,sans-serif;max-width:820px;margin:24px auto">
 <h2>PR digest dashboard</h2>
-<h3>Open PRs</h3>{svg_line(days, label="open PRs per day")}
-<h3>Review debt</h3>{svg_line(debt, color="#b91c1c", label="stale + blocked per day")}
-<h3>Per-repo open PRs</h3><table>{repo_rows or '<tr><td>No open PRs</td></tr>'}</table>
-<h3>Median time-to-first-review (rolling week)</h3>{svg_line(first_review_trend, color="#15803d", label="days")}
-<h3>Most stuck (30d view, current)</h3><ul>{stuck_rows or '<li>Nothing stuck</li>'}</ul>
+<p style="color:#6b7280">Data as of {esc(updated)} · today: {total} open,
+{stale_now} stale or blocked ({debt_word})</p>
+<h3>Open PRs <small style="color:#6b7280;font-weight:normal">— today: {total}</small></h3>
+<p style="color:#6b7280;font-size:13px;margin:4px 0">Each point is the total open
+(non-draft) PRs across all repos that day. Rising fast means PRs are arriving
+faster than they close.</p>
+{svg_line(days, label="open PRs per day", empty_msg="Needs a few days of history — one dot per day builds the line.")}
+<h3>Review debt <small style="color:#6b7280;font-weight:normal">— today: {stale_now}</small></h3>
+<p style="color:#6b7280;font-size:13px;margin:4px 0">PRs waiting more than 3 days
+for review. Flat at zero is the goal; a rising line means reviews are falling behind.</p>
+{svg_line(debt, color="#b91c1c", label="stale + blocked per day", empty_msg="Needs a few days of history — one dot per day builds the line.")}
+<h3>Per-repo open PRs</h3>
+<p style="color:#6b7280;font-size:13px;margin:4px 0">Where the current open PRs sit.</p>
+<table>{repo_rows or '<tr><td>No open PRs</td></tr>'}</table>
+<h3>Median time-to-first-review (rolling week)</h3>
+<p style="color:#6b7280;font-size:13px;margin:4px 0">Median days from PR open to
+first human review, over a rolling 7-day window. Lower is faster.</p>
+{svg_line(first_review_trend, color="#15803d", label="days", empty_msg="No data yet — fills in as PRs get their first review.")}
+<h3>Most stuck (current)</h3>
+<p style="color:#6b7280;font-size:13px;margin:4px 0">PRs waiting more than 3 days
+right now, longest wait first.</p>
+<ul>{stuck_rows or '<li>Nothing stuck — every open PR is under 3 days.</li>'}</ul>
 </body></html>"""
 
 
