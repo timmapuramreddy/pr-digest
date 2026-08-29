@@ -10,6 +10,7 @@ on:
         description: "Build everything but do not push, post, or email"
         type: boolean
         default: true
+  pull_request:
 
 concurrency:
   group: pr-digest
@@ -26,6 +27,8 @@ jobs:
       - run: pip install pytest && pytest -q
 
   digest:
+    # Digest runs (fetch, push, email) never run on pull_request events.
+    if: github.event_name != 'pull_request'
     needs: test
     runs-on: ubuntu-latest
     permissions:
