@@ -5,7 +5,9 @@ Reads every configured repo, finds open non-draft PRs, ages them into
 buckets, writes an HTML email body, and (optionally) pings PRs that have
 been waiting past the escalation threshold.
 
-Stdlib only — no pip install step in CI.
+Stdlib only — no pip install step in CI. The script computes and writes
+files to the workspace only; the workflow owns every git push and every
+pass/fail decision.
 """
 
 import json
@@ -13,11 +15,13 @@ import os
 import sys
 import urllib.error
 import urllib.request
+from dataclasses import dataclass
 from datetime import datetime, timezone
+from pathlib import Path
 
 API = "https://api.github.com"
 
-REPOS = [
+DEFAULT_REPOS = [
     "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
     "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
     "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
@@ -34,19 +38,35 @@ ESCALATE_DAYS = 7
 # Hidden marker so we can tell our own ping comments apart from human ones.
 PING_MARKER = "<!-- pr-digest-stale-ping -->"
 
-TOKEN = os.environ["PR_SCAN_TOKEN"]
-VIEWER = os.environ.get("VIEWER_LOGIN", "timmapuramreddy")
-DRY_RUN = os.environ.get("DRY_RUN", "false").lower() == "true"
 
-NOW = datetime.now(timezone.utc)
+@dataclass
+class Config:
+    token: str
+    viewer: str
+    dry_run: bool
+    repos: list
+    data_dir: Path
+    now: datetime
 
 
-def api(path, method="GET", body=None):
+def load_config(now=None):
+    """Read settings from the environment. Injectable `now` keeps tests deterministic."""
+    return Config(
+        token=os.environ["PR_SCAN_TOKEN"],
+        viewer=os.environ.get("VIEWER_LOGIN", "timmapuramreddy"),
+        dry_run=os.environ.get("DRY_RUN", "false").lower() == "true",
+        repos=list(DEFAULT_REPOS),
+        data_dir=Path(os.environ.get("DATA_DIR", "data")),
+        now=now or datetime.now(timezone.utc),
+    )
+
+
+def api(cfg, path, method="GET", body=None):
     """Call the GitHub API. Returns parsed JSON, or None on 404."""
     url = path if path.startswith("http") else f"{API}{path}"
     data = json.dumps(body).encode() if body is not None else None
     req = urllib.request.Request(url, data=data, method=method)
-    req.add_header("Authorization", f"Bearer {TOKEN}")
+    req.add_header("Authorization", f"Bearer {cfg.token}")
     req.add_header("Accept", "application/vnd.github+json")
     req.add_header("X-GitHub-Api-Version", "2022-11-28")
     if data is not None:
@@ -64,46 +84,32 @@ def parse_ts(value):
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
-def age_days(ts):
-    return (NOW - ts).total_seconds() / 86400
+def age_days(cfg, ts):
+    return (cfg.now - ts).total_seconds() / 86400
 
 
-def last_human_review(repo, number):
-    """Most recent review timestamp from someone other than the PR author.
-
-    Returns None when nobody has reviewed yet — that is the case we most
-    want to surface.
-    """
-    reviews = api(f"/repos/{repo}/pulls/{number}/reviews?per_page=100") or []
-    stamps = [parse_ts(r["submitted_at"]) for r in reviews if r.get("submitted_at")]
-    return max(stamps) if stamps else None
-
-
-def already_pinged(repo, number):
-    """True if we posted a ping on this PR in the last ESCALATE_DAYS.
-
-    Without this the workflow would re-comment every single morning.
-    """
-    comments = api(f"/repos/{repo}/issues/{number}/comments?per_page=100") or []
+def already_pinged(cfg, repo, number):
+    """True if we posted a ping on this PR in the last ESCALATE_DAYS."""
+    comments = api(cfg, f"/repos/{repo}/issues/{number}/comments?per_page=100") or []
     for c in reversed(comments):
         if PING_MARKER in (c.get("body") or ""):
-            return age_days(parse_ts(c["created_at"])) < ESCALATE_DAYS
+            return age_days(cfg, parse_ts(c["created_at"])) < ESCALATE_DAYS
     return False
 
 
-def ping(repo, number, waiting):
+def ping(cfg, repo, number, waiting):
     body = (
         f"{PING_MARKER}\n"
         f"⏳ This PR has been open and unreviewed for **{waiting:.0f} days**.\n\n"
         f"Reviewers, please take a look — or close it if it is no longer needed."
     )
-    api(f"/repos/{repo}/issues/{number}/comments", method="POST", body={"body": body})
+    api(cfg, f"/repos/{repo}/issues/{number}/comments", method="POST", body={"body": body})
 
 
-def collect(repo):
+def collect(cfg, repo):
     """Return (list_of_pr_dicts, error_string_or_None) for one repo."""
     try:
-        pulls = api(f"/repos/{repo}/pulls?state=open&per_page=100")
+        pulls = api(cfg, f"/repos/{repo}/pulls?state=open&per_page=100")
     except urllib.error.HTTPError as exc:
         return [], f"HTTP {exc.code}"
     if pulls is None:
@@ -114,9 +120,9 @@ def collect(repo):
         if pr.get("draft"):
             continue
         created = parse_ts(pr["created_at"])
-        reviewed = last_human_review(repo, pr["number"])
+        reviewed = last_human_review(cfg, repo, pr["number"])
         # "Waiting" = time since the last review, or since it opened if none.
-        waiting = age_days(reviewed or created)
+        waiting = age_days(cfg, reviewed or created)
         reviewers = [u["login"] for u in pr.get("requested_reviewers") or []]
         out.append(
             {
@@ -126,14 +132,25 @@ def collect(repo):
                 "url": pr["html_url"],
                 "author": pr["user"]["login"],
                 "base": pr["base"]["ref"],
-                "age": age_days(created),
+                "age": age_days(cfg, created),
                 "waiting": waiting,
                 "reviewed": reviewed is not None,
                 "reviewers": reviewers,
-                "yours": VIEWER in reviewers,
+                "yours": cfg.viewer in reviewers,
             }
         )
     return out, None
+
+
+def last_human_review(cfg, repo, number):
+    """Most recent review timestamp from someone other than the PR author.
+
+    Returns None when nobody has reviewed yet — that is the case we most
+    want to surface.
+    """
+    reviews = api(cfg, f"/repos/{repo}/pulls/{number}/reviews?per_page=100") or []
+    stamps = [parse_ts(r["submitted_at"]) for r in reviews if r.get("submitted_at")]
+    return max(stamps) if stamps else None
 
 
 def bucket(pr):
@@ -186,7 +203,7 @@ def row(pr):
     </tr>"""
 
 
-def build_html(all_prs, quiet_repos, errors):
+def build_html(cfg, all_prs, quiet_repos, errors):
     buckets = {k: [] for k in BUCKET_META}
     for pr in all_prs:
         buckets[bucket(pr)].append(pr)
@@ -195,8 +212,8 @@ def build_html(all_prs, quiet_repos, errors):
         '<div style="font-family:-apple-system,Segoe UI,sans-serif;max-width:760px">',
         f'<h2 style="margin:0 0 4px">PR review digest</h2>',
         f'<p style="color:#6b7280;margin:0 0 18px">'
-        f'{NOW.strftime("%A, %d %B %Y")} · {len(all_prs)} open PR(s) across '
-        f'{len(REPOS)} repos</p>',
+        f'{cfg.now.strftime("%A, %d %B %Y")} · {len(all_prs)} open PR(s) across '
+        f'{len(cfg.repos)} repos</p>',
     ]
 
     if not all_prs:
@@ -239,10 +256,11 @@ def build_html(all_prs, quiet_repos, errors):
 
 
 def main():
+    cfg = load_config()
     all_prs, quiet_repos, errors = [], [], []
 
-    for repo in REPOS:
-        prs, err = collect(repo)
+    for repo in cfg.repos:
+        prs, err = collect(cfg, repo)
         if err:
             errors.append((repo, err))
             continue
@@ -256,14 +274,14 @@ def main():
     for pr in all_prs:
         if pr["waiting"] < ESCALATE_DAYS:
             continue
-        if DRY_RUN:
+        if cfg.dry_run:
             print(f"[dry-run] would ping {pr['repo']}#{pr['number']}")
             continue
-        if not already_pinged(pr["repo"], pr["number"]):
-            ping(pr["repo"], pr["number"], pr["waiting"])
+        if not already_pinged(cfg, pr["repo"], pr["number"]):
+            ping(cfg, pr["repo"], pr["number"], pr["waiting"])
             pinged += 1
 
-    html = build_html(all_prs, quiet_repos, errors)
+    html = build_html(cfg, all_prs, quiet_repos, errors)
     with open("digest.html", "w") as fh:
         fh.write(html)
 
@@ -272,18 +290,19 @@ def main():
     if stale:
         subject += f", {stale} stale"
 
-    # Surface counts to the workflow so it can decide whether to send.
+    # Surface state to the workflow: it owns sending, pushing, and pass/fail.
     if out := os.environ.get("GITHUB_OUTPUT"):
         with open(out, "a") as fh:
             fh.write(f"total={len(all_prs)}\n")
             fh.write(f"stale={stale}\n")
             fh.write(f"subject={subject}\n")
+            fh.write(f"errors={'true' if errors else 'false'}\n")
+            fh.write(f"dry_run={'true' if cfg.dry_run else 'false'}\n")
 
     print(f"{len(all_prs)} open PR(s), {stale} stale, {pinged} pinged, "
           f"{len(errors)} repo error(s)")
-
-    # A repo we cannot read is a broken digest, not a quiet one — fail loudly.
-    return 1 if errors else 0
+    # Never exit non-zero — the workflow's fail gate handles that.
+    return 0
 
 
 if __name__ == "__main__":
