@@ -2,23 +2,51 @@ name: PR review digest
 
 on:
   schedule:
-    # 03:30 UTC = 09:00 IST, weekdays only.
-    - cron: "30 3 * * 1-5"
+    # 03:30 UTC = 09:00 IST, then every 2h until 19:00 IST, weekdays only.
+    - cron: "30 3,5,7,9,11,13 * * 1-5"
   workflow_dispatch:
     inputs:
       dry_run:
-        description: "Build the digest but do not post escalation comments"
+        description: "Build everything but do not push, post, or email"
         type: boolean
         default: true
+  pull_request:
 
-permissions:
-  contents: read
+concurrency:
+  group: pr-digest
+  cancel-in-progress: false
 
 jobs:
-  digest:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest && pytest -q
+
+  digest:
+    # Digest runs (fetch, push, email) never run on pull_request events.
+    if: github.event_name != 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out data branch
+        uses: actions/checkout@v4
+        with:
+          ref: data
+          path: data
+
+      - name: Check out pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: pages
+          path: pages
 
       - uses: actions/setup-python@v5
         with:
@@ -30,9 +58,25 @@ jobs:
           PR_SCAN_TOKEN: ${{ secrets.PR_SCAN_TOKEN }}
           VIEWER_LOGIN: timmapuramreddy
           DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || 'false' }}
+          DATA_DIR: data
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
         run: python scripts/digest.py
 
+      - name: Push daily snapshot
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.dry_run != 'true'
+        working-directory: data
+        run: |
+          git config user.name "pr-digest"
+          git config user.email "actions@users.noreply.github.com"
+          mkdir -p snapshots
+          cp "$GITHUB_WORKSPACE/snapshot.json" "snapshots/$(date -u +%F).json"
+          git add snapshots
+          git diff --cached --quiet || git commit -m "snapshot $(date -u +%F) $(date -u +%H:%M)"
+          git push
+
       - name: Email digest
+        id: mail
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.should_send == 'true' && steps.build.outputs.dry_run != 'true'
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
@@ -45,3 +89,31 @@ jobs:
           subject: ${{ steps.build.outputs.subject }}
           html_body: file://digest.html
           convert_markdown: false
+
+      - name: Update last-sent baseline
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.dry_run != 'true' && steps.build.outputs.should_send == 'true' && steps.mail.outcome == 'success'
+        working-directory: data
+        run: |
+          git config user.name "pr-digest"
+          git config user.email "actions@users.noreply.github.com"
+          cp "$GITHUB_WORKSPACE/last-sent.json" last-sent.json
+          git add last-sent.json
+          git diff --cached --quiet || git commit -m "baseline $(date -u '+%F %H:%M')"
+          git push
+
+      - name: Publish dashboard
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.dry_run != 'true' && steps.build.outputs.morning_run == 'true'
+        working-directory: pages
+        run: |
+          git config user.name "pr-digest"
+          git config user.email "actions@users.noreply.github.com"
+          cp "$GITHUB_WORKSPACE/index.html" index.html
+          git add index.html
+          git diff --cached --quiet || git commit -m "dashboard $(date -u +%F)"
+          git push
+
+      - name: Fail on repo read errors
+        if: always() && steps.build.outputs.errors == 'true'
+        run: |
+          echo "One or more repos could not be read — token revoked? Repo renamed?"
+          exit 1
