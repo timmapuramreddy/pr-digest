@@ -2,3 +2,7 @@ digest.html
 __pycache__/
 *.pyc
 .worktrees/
+snapshot.json
+last-sent.json
+index.html
+tmp-data/
