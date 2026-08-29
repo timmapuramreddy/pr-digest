@@ -411,7 +411,7 @@ def since_yesterday(current_prs, prev_snapshot):
     ]
     slipped = [
         k for k in sorted(set(cur) & set(prev))
-        if BUCKET_ORDER.index(cur[k]["bucket"]) < BUCKET_ORDER.index(prev[k]["bucket"])
+        if BUCKET_ORDER.index(bucket(cur[k])) < BUCKET_ORDER.index(prev[k]["bucket"])
     ]
     return {
         "new": new,

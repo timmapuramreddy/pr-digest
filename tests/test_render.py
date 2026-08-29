@@ -20,7 +20,8 @@ def test_since_yesterday_counts():
         {"repo": "o/b", "number": 3, "resolution": "merged", "merged_at": None,
          "closed_at": None, "created_at": None}
     ]}
-    cur = [strip_pr("b#1", bucket="stale", first_review_at="2026-08-28T10:00:00Z"),
+    cur = [strip_pr("b#1", bucket="stale", waiting=4.0,
+                    first_review_at="2026-08-28T10:00:00Z"),
            strip_pr("b#4")]
     s = digest.since_yesterday(cur, prev)
     assert s["new"] == ["o/b#4"]
@@ -53,3 +54,14 @@ def test_build_html_has_waiting_on_you_first():
            strip_pr("b#2", waiting=4.0, bucket="stale")]
     html = digest.build_html(None, prs, [], [], None)
     assert html.index("Waiting on you") < html.index("Stale")
+
+
+def test_since_yesterday_with_collect_shaped_prs():
+    prev = {"prs": [strip_pr("b#1", bucket="warm")], "resolved": []}
+    cur = [strip_pr("b#1")]
+    del cur[0]["bucket"]  # collect() output has waiting, not bucket
+    s = digest.since_yesterday(cur, prev)
+    assert s["slipped"] == []
+    cur[0]["waiting"] = 4.0  # warm → stale once bucket() computes it
+    s = digest.since_yesterday(cur, prev)
+    assert s["slipped"] == ["o/b#1"]
