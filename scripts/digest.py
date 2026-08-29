@@ -16,7 +16,7 @@ import sys
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta as _timedelta, timezone
 from pathlib import Path
 
 API = "https://api.github.com"
@@ -278,6 +278,93 @@ def read_baseline(cfg):
     return json.loads(path.read_text())
 
 
+def build_snapshot(cfg, all_prs, resolved, errors):
+    """One JSON-serialisable snapshot of today's state. Last write per day wins."""
+    return {
+        "date": cfg.now.date().isoformat(),
+        "generated_at": cfg.now.isoformat(),
+        "prs": [
+            {
+                "repo": p["repo"],
+                "number": p["number"],
+                "title": p.get("title"),
+                "url": p.get("url"),
+                "author": p.get("author"),
+                "base": p.get("base"),
+                "head_sha": p.get("head_sha"),
+                "created_at": p["created_at"],
+                "age_days": round(p.get("age", 0), 2),
+                "waiting_days": round(p.get("waiting", 0), 2),
+                "first_review_at": p.get("first_review_at"),
+                "last_review_at": p.get("last_review_at"),
+                "your_last_review_at": p.get("your_last_review_at"),
+                "your_last_review_sha": p.get("your_last_review_sha"),
+                "reviewers": p.get("reviewers", []),
+                "yours": p.get("yours", False),
+                "ci": p.get("ci"),
+                "additions": p.get("additions", 0),
+                "deletions": p.get("deletions", 0),
+                "mergeable": p.get("mergeable"),
+                "bucket": bucket({**p, "waiting": p.get("waiting", 0)}),
+                "you_queue": waiting_on_you(
+                    {
+                        **p,
+                        "reviewers": p.get("reviewers", []),
+                        "yours": p.get("yours", False),
+                        "your_last_review_sha": p.get("your_last_review_sha"),
+                        "head_sha": p.get("head_sha"),
+                    }
+                ),
+            }
+            for p in all_prs
+        ],
+        "resolved": resolved,
+        "errors": bool(errors),
+    }
+
+
+def read_snapshot(cfg, day):
+    path = cfg.data_dir / "snapshots" / f"{day.isoformat()}.json"
+    if not path.exists():
+        return None
+    return json.loads(path.read_text())
+
+
+def previous_snapshot(cfg, lookback_days=4):
+    """Most recent snapshot before today — walks back over weekends."""
+    for offset in range(1, lookback_days + 1):
+        snap = read_snapshot(cfg, cfg.now.date() - _timedelta(days=offset))
+        if snap is not None:
+            return snap
+    return None
+
+
+def resolve_disappeared(cfg, prev_snapshot, current_keys):
+    """PRs in the previous snapshot but gone now → merged or closed_unmerged.
+
+    Blind spot by design: a PR opened and merged between two runs is never
+    seen by any snapshot.
+    """
+    out = []
+    for p in prev_snapshot.get("prs", []):
+        key = f"{p['repo']}#{p['number']}"
+        if key in current_keys:
+            continue
+        d = api(cfg, f"/repos/{p['repo']}/pulls/{p['number']}") or {}
+        merged = bool(d.get("merged"))
+        out.append(
+            {
+                "repo": p["repo"],
+                "number": p["number"],
+                "resolution": "merged" if merged else "closed_unmerged",
+                "merged_at": d.get("merged_at") if merged else None,
+                "closed_at": d.get("closed_at"),
+                "created_at": p.get("created_at"),
+            }
+        )
+    return out
+
+
 def bucket(pr):
     if pr["waiting"] >= ESCALATE_DAYS:
         return "escalate"
@@ -398,6 +485,13 @@ def main():
     current = state_for_baseline(all_prs, errors)
     send, reason = should_send(cfg, current, baseline)
     print(f"send={send} ({reason})")
+
+    prev_snap = previous_snapshot(cfg)
+    current_keys = {pr_key(p) for p in all_prs}
+    resolved = resolve_disappeared(cfg, prev_snap, current_keys) if prev_snap else []
+    snapshot = build_snapshot(cfg, all_prs, resolved, errors)
+    with open("snapshot.json", "w") as fh:
+        json.dump(snapshot, fh, indent=1)
 
     # Escalation pings — only for PRs past the threshold, once per window.
     pinged = 0
