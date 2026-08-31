@@ -1,0 +1,91 @@
+{
+ "date": "2026-08-31",
+ "generated_at": "2026-08-31T07:11:31.500352+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 344,
+   "title": "feature/XP-I4243-EN-changes",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0/pull/344",
+   "author": "jahnavi31r",
+   "base": "Feature/XP-I4243",
+   "head_sha": "4d138b51ba2492f098102af28d735c14328f0ee2",
+   "created_at": "2026-08-28T07:14:44Z",
+   "age_days": 3.0,
+   "waiting_days": 0.05,
+   "first_review_at": "2026-08-28T15:55:22Z",
+   "last_review_at": "2026-08-31T05:59:15Z",
+   "your_last_review_at": "2026-08-31T05:59:15Z",
+   "your_last_review_sha": "4d138b51ba2492f098102af28d735c14328f0ee2",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 840,
+   "deletions": 114,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 343,
+   "title": "[XP-I4240] feat: add Table question type editor UI",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0/pull/343",
+   "author": "ajk-2409",
+   "base": "feature/table-question-type",
+   "head_sha": "981ad4ee058999b8e2522e41d0204f69f3f922bd",
+   "created_at": "2026-08-27T11:15:25Z",
+   "age_days": 3.83,
+   "waiting_days": 0.07,
+   "first_review_at": "2026-08-28T15:47:49Z",
+   "last_review_at": "2026-08-31T05:37:14Z",
+   "your_last_review_at": "2026-08-31T05:37:14Z",
+   "your_last_review_sha": "981ad4ee058999b8e2522e41d0204f69f3f922bd",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 182,
+   "deletions": 11,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 495,
+   "title": "[TIQ-I1455 -> release/qa ] Bug fix/tiq i1455 qa (Bug fix/tiq i1455 latest (BUG - Audio Support for Qu)estions & Options in Live Sessions - Unclear Audio Play/Stop Control- #494)",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/495",
+   "author": "vignesh-9860",
+   "base": "release/qa",
+   "head_sha": "baa6ac18b4d974f69b71fd11ee656ec5f79ed8ab",
+   "created_at": "2026-08-27T11:46:09Z",
+   "age_days": 3.81,
+   "waiting_days": 2.28,
+   "first_review_at": "2026-08-29T00:33:14Z",
+   "last_review_at": "2026-08-29T00:33:14Z",
+   "your_last_review_at": "2026-08-29T00:33:14Z",
+   "your_last_review_sha": "baa6ac18b4d974f69b71fd11ee656ec5f79ed8ab",
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 22,
+   "deletions": 26,
+   "mergeable": true,
+   "bucket": "warm",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
+   "number": 258,
+   "resolution": "merged",
+   "merged_at": "2026-08-31T04:20:08Z",
+   "closed_at": "2026-08-31T04:20:08Z",
+   "created_at": "2026-08-27T11:12:15Z"
+  }
+ ],
+ "errors": false
+}
