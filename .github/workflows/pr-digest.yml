@@ -102,7 +102,7 @@ jobs:
           git push
 
       - name: Publish dashboard
-        if: always() && steps.build.outcome == 'success' && steps.build.outputs.dry_run != 'true' && steps.build.outputs.morning_run == 'true'
+        if: always() && steps.build.outcome == 'success' && steps.build.outputs.dry_run != 'true'
         working-directory: pages
         run: |
           git config user.name "pr-digest"
