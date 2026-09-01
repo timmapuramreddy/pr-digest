@@ -1,6 +1,6 @@
 {
  "date": "2026-09-01",
- "generated_at": "2026-09-01T14:13:41.188579+00:00",
+ "generated_at": "2026-09-01T14:55:58.886458+00:00",
  "prs": [
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
@@ -11,8 +11,8 @@
    "base": "release/qa",
    "head_sha": "1c041f3373197c9b4df240b2e59576bd6f9ce742",
    "created_at": "2026-09-01T12:20:51Z",
-   "age_days": 0.08,
-   "waiting_days": 0.08,
+   "age_days": 0.11,
+   "waiting_days": 0.11,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
@@ -27,32 +27,6 @@
    "mergeable": true,
    "bucket": "fresh",
    "you_queue": true
-  },
-  {
-   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
-   "number": 514,
-   "title": "[TIQ-I1512/ TIQ-I1489] -> release/dev] BUG - Export for Kannada Quizzes not working fine. and BUG -  Image Not Loaded on Response Page",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/514",
-   "author": "vignesh-9860",
-   "base": "release/dev",
-   "head_sha": "12c242a844c3130f3d2e6de2695aaf1c5417e36d",
-   "created_at": "2026-09-01T11:56:55Z",
-   "age_days": 0.09,
-   "waiting_days": 0.09,
-   "first_review_at": null,
-   "last_review_at": null,
-   "your_last_review_at": null,
-   "your_last_review_sha": null,
-   "reviewers": [
-    "ajk-2409"
-   ],
-   "yours": false,
-   "ci": "none",
-   "additions": 906,
-   "deletions": 102,
-   "mergeable": false,
-   "bucket": "fresh",
-   "you_queue": false
   }
  ],
  "resolved": [
