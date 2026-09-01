@@ -866,7 +866,6 @@ def main():
             fh.write(f"subject={subject}\n")
             fh.write(f"errors={'true' if errors else 'false'}\n")
             fh.write(f"dry_run={'true' if cfg.dry_run else 'false'}\n")
-            fh.write(f"morning_run={'true' if cfg.now.hour == 3 else 'false'}\n")
             fh.write(f"should_send={'true' if send else 'false'}\n")
 
     print(f"{len(all_prs)} open PR(s), {stale} stale, {pinged} pinged, "
