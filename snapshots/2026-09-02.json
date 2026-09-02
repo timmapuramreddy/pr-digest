@@ -1,0 +1,16 @@
+{
+ "date": "2026-09-02",
+ "generated_at": "2026-09-02T08:02:10.937202+00:00",
+ "prs": [],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 514,
+   "resolution": "merged",
+   "merged_at": "2026-09-01T22:51:56Z",
+   "closed_at": "2026-09-01T22:51:56Z",
+   "created_at": "2026-09-01T12:20:51Z"
+  }
+ ],
+ "errors": false
+}
