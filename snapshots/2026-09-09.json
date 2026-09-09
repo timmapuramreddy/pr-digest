@@ -1,0 +1,65 @@
+{
+ "date": "2026-09-09",
+ "generated_at": "2026-09-09T08:17:43.111106+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 350,
+   "title": "BugFix/XP-I4251  BUG - All Help Videos Not Visible in Help Videos Tab",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0/pull/350",
+   "author": "vignesh-9860",
+   "base": "BugFix/XP-I4251",
+   "head_sha": "bab4c4d69e8be487ff175f8e1e589f01644b658d",
+   "created_at": "2026-09-09T04:58:38Z",
+   "age_days": 0.14,
+   "waiting_days": 0.1,
+   "first_review_at": "2026-09-09T05:47:07Z",
+   "last_review_at": "2026-09-09T05:47:24Z",
+   "your_last_review_at": "2026-09-09T05:47:24Z",
+   "your_last_review_sha": "bab4c4d69e8be487ff175f8e1e589f01644b658d",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 88,
+   "deletions": 51,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 349,
+   "resolution": "merged",
+   "merged_at": "2026-09-09T05:54:35Z",
+   "closed_at": "2026-09-09T05:54:35Z",
+   "created_at": "2026-09-08T05:08:16Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 523,
+   "resolution": "merged",
+   "merged_at": "2026-09-09T05:13:11Z",
+   "closed_at": "2026-09-09T05:13:11Z",
+   "created_at": "2026-09-08T11:55:16Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 522,
+   "resolution": "merged",
+   "merged_at": "2026-09-09T05:13:08Z",
+   "closed_at": "2026-09-09T05:13:08Z",
+   "created_at": "2026-09-08T11:54:30Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 535,
+   "resolution": "merged",
+   "merged_at": "2026-09-08T16:38:29Z",
+   "closed_at": "2026-09-08T16:38:29Z",
+   "created_at": "2026-09-08T09:56:08Z"
+  }
+ ],
+ "errors": false
+}
