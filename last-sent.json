@@ -6,11 +6,21 @@
    "you_queue": false
   },
   {
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#524",
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#538",
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
    "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#536",
    "bucket": "fresh",
    "you_queue": true
   }
  ],
  "errors": false,
- "sent_at": "2026-09-09T13:48:40.928766+00:00"
+ "sent_at": "2026-09-10T08:17:25.621553+00:00"
 }
