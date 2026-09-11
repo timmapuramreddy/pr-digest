@@ -1,21 +1,16 @@
 {
  "prs": [
   {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#524",
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#539",
    "bucket": "fresh",
-   "you_queue": false
+   "you_queue": true
   },
   {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#538",
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile#105",
    "bucket": "fresh",
-   "you_queue": false
-  },
-  {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#536",
-   "bucket": "warm",
    "you_queue": true
   }
  ],
  "errors": false,
- "sent_at": "2026-09-10T13:43:48.091893+00:00"
+ "sent_at": "2026-09-11T08:12:14.769266+00:00"
 }
