@@ -1,7 +1,85 @@
 {
  "date": "2026-09-15",
- "generated_at": "2026-09-15T08:51:19.283329+00:00",
+ "generated_at": "2026-09-15T14:23:28.668781+00:00",
  "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 556,
+   "title": "[TIQ-I1575 -> release/qa] (DEV - FE - Class with 0 students should not be allowed to be selected for conducting a session)",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/556",
+   "author": "jahnavi31r",
+   "base": "release/qa",
+   "head_sha": "af473564d63404282b0571147a96a9b71485231a",
+   "created_at": "2026-09-15T12:03:47Z",
+   "age_days": 0.1,
+   "waiting_days": 0.1,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "success",
+   "additions": 130,
+   "deletions": 66,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 555,
+   "title": "[TIQ-I1575] -> release/dev",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/555",
+   "author": "jahnavi31r",
+   "base": "release/dev",
+   "head_sha": "25bb832794bc7bbfa8ee2aec2a897285ee021a91",
+   "created_at": "2026-09-15T11:14:18Z",
+   "age_days": 0.13,
+   "waiting_days": 0.13,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "vignesh-9860"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 130,
+   "deletions": 66,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 554,
+   "title": "[TIQ-I1598] feat: Dynamic red outline validation for unfulfilled mandatory fields",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/554",
+   "author": "strat0-s",
+   "base": "feature/TIQ-I1598-session-form-validation-outline",
+   "head_sha": "432c76b31992c0dc8bab8478e57d187539bc8704",
+   "created_at": "2026-09-15T10:08:46Z",
+   "age_days": 0.18,
+   "waiting_days": 0.18,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "none",
+   "additions": 50,
+   "deletions": 1,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
    "number": 552,
@@ -11,8 +89,8 @@
    "base": "BugFix/TIQ-I1566-new",
    "head_sha": "bb66eacfa04e2b675b73abef09c14280cd448c5e",
    "created_at": "2026-09-15T02:23:22Z",
-   "age_days": 0.27,
-   "waiting_days": 0.12,
+   "age_days": 0.5,
+   "waiting_days": 0.35,
    "first_review_at": "2026-09-15T03:37:29Z",
    "last_review_at": "2026-09-15T05:55:17Z",
    "your_last_review_at": "2026-09-15T05:55:17Z",
@@ -35,8 +113,8 @@
    "base": "release/dev",
    "head_sha": "0980e75fb79c8efcf89a0884bfaa2f619611b6ca",
    "created_at": "2026-09-15T02:02:44Z",
-   "age_days": 0.28,
-   "waiting_days": 0.28,
+   "age_days": 0.51,
+   "waiting_days": 0.51,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
@@ -51,32 +129,6 @@
    "mergeable": true,
    "bucket": "fresh",
    "you_queue": false
-  },
-  {
-   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
-   "number": 105,
-   "title": "[TIQ-1620] feat: Full end-to-end offline session (create + attend + conduct)",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/105",
-   "author": "ajk-2409",
-   "base": "feature/TIQ-I1620-offline-full-e2e",
-   "head_sha": "bf0f079a8c2068883af099e55da1bf912af09c5f",
-   "created_at": "2026-09-11T08:07:49Z",
-   "age_days": 4.03,
-   "waiting_days": 4.03,
-   "first_review_at": null,
-   "last_review_at": null,
-   "your_last_review_at": null,
-   "your_last_review_sha": null,
-   "reviewers": [
-    "timmapuramreddy"
-   ],
-   "yours": true,
-   "ci": "none",
-   "additions": 4086,
-   "deletions": 72,
-   "mergeable": true,
-   "bucket": "stale",
-   "you_queue": true
   }
  ],
  "resolved": [
@@ -119,6 +171,14 @@
    "merged_at": "2026-09-15T07:16:33Z",
    "closed_at": "2026-09-15T07:16:33Z",
    "created_at": "2026-09-11T09:38:41Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 105,
+   "resolution": "merged",
+   "merged_at": "2026-09-15T11:43:09Z",
+   "closed_at": "2026-09-15T11:43:09Z",
+   "created_at": "2026-09-11T08:07:49Z"
   }
  ],
  "errors": false
