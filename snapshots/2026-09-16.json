@@ -1,0 +1,117 @@
+{
+ "date": "2026-09-16",
+ "generated_at": "2026-09-16T08:44:42.298449+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 535,
+   "title": "TIQ-I1627: sync adapter for response and confirmed_question events",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/535",
+   "author": "timmapuramreddy",
+   "base": "develop",
+   "head_sha": "8dc1726265a8cb89a8aa06662f2684a575b8a4a6",
+   "created_at": "2026-09-16T06:35:26Z",
+   "age_days": 0.09,
+   "waiting_days": 0.03,
+   "first_review_at": "2026-09-16T06:42:01Z",
+   "last_review_at": "2026-09-16T07:59:00Z",
+   "your_last_review_at": "2026-09-16T07:59:00Z",
+   "your_last_review_sha": "8dc1726265a8cb89a8aa06662f2684a575b8a4a6",
+   "reviewers": [],
+   "yours": false,
+   "ci": "success",
+   "additions": 1610,
+   "deletions": 50,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 552,
+   "title": "Bug fix/tiq i1566   (BUG - Quiz Library - Folder list missing pagination/lazy loading )",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/552",
+   "author": "vignesh-9860",
+   "base": "BugFix/TIQ-I1566-new",
+   "head_sha": "32b87ec05b51a38943c48c2572ac21c1813c377c",
+   "created_at": "2026-09-15T02:23:22Z",
+   "age_days": 1.26,
+   "waiting_days": 1.12,
+   "first_review_at": "2026-09-15T03:37:29Z",
+   "last_review_at": "2026-09-15T05:55:17Z",
+   "your_last_review_at": "2026-09-15T05:55:17Z",
+   "your_last_review_sha": "bb66eacfa04e2b675b73abef09c14280cd448c5e",
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "none",
+   "additions": 178,
+   "deletions": 25,
+   "mergeable": true,
+   "bucket": "warm",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 106,
+   "title": "[TIQ-1640] fix: Session card class name + exact timestamps",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/106",
+   "author": "ajk-2409",
+   "base": "bugfix/TIQ-I1640-session-card-exact-timestamps",
+   "head_sha": "1b1bebcb38ba97f345a4f3f7fd0262ab47c1f7f3",
+   "created_at": "2026-09-16T05:46:40Z",
+   "age_days": 0.12,
+   "waiting_days": 0.12,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "none",
+   "additions": 28,
+   "deletions": 24,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 556,
+   "resolution": "merged",
+   "merged_at": "2026-09-16T04:41:00Z",
+   "closed_at": "2026-09-16T04:41:00Z",
+   "created_at": "2026-09-15T12:03:47Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 555,
+   "resolution": "merged",
+   "merged_at": "2026-09-16T05:05:38Z",
+   "closed_at": "2026-09-16T05:05:38Z",
+   "created_at": "2026-09-15T11:14:18Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 554,
+   "resolution": "merged",
+   "merged_at": "2026-09-16T05:32:15Z",
+   "closed_at": "2026-09-16T05:32:15Z",
+   "created_at": "2026-09-15T10:08:46Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 551,
+   "resolution": "merged",
+   "merged_at": "2026-09-16T05:19:26Z",
+   "closed_at": "2026-09-16T05:19:26Z",
+   "created_at": "2026-09-15T02:02:44Z"
+  }
+ ],
+ "errors": false
+}
