@@ -1,0 +1,127 @@
+{
+ "date": "2026-09-17",
+ "generated_at": "2026-09-17T08:48:13.084423+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 541,
+   "title": "[TIQ-I1643 \u2192 release/qa] fix: Allow image-only answer options without required text",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/541",
+   "author": "strat0-s",
+   "base": "release/qa",
+   "head_sha": "6f845de198e24608e429336c683ed48ca8b5b651",
+   "created_at": "2026-09-17T07:44:14Z",
+   "age_days": 0.04,
+   "waiting_days": 0.04,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 156,
+   "deletions": 0,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 540,
+   "title": "[TIQ-I1643 \u2192 develop] fix: Allow image-only answer options without required text",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/540",
+   "author": "strat0-s",
+   "base": "develop",
+   "head_sha": "a6735c13cc13030f26d94fc934873473e9b25c62",
+   "created_at": "2026-09-17T07:43:08Z",
+   "age_days": 0.05,
+   "waiting_days": 0.05,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 156,
+   "deletions": 0,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 538,
+   "title": "TIQ-I1628: add teacher-scoped sync pull",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/538",
+   "author": "timmapuramreddy",
+   "base": "develop",
+   "head_sha": "936ea6c5f898f1ea0bfb46493f10f76d88957b01",
+   "created_at": "2026-09-17T02:27:51Z",
+   "age_days": 0.26,
+   "waiting_days": 0.03,
+   "first_review_at": "2026-09-17T02:45:11Z",
+   "last_review_at": "2026-09-17T08:10:39Z",
+   "your_last_review_at": "2026-09-17T08:10:39Z",
+   "your_last_review_sha": "85b22fc66a2d90f8a719f6deb8ba99b2a77436af",
+   "reviewers": [],
+   "yours": false,
+   "ci": "pending",
+   "additions": 6614,
+   "deletions": 101,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 552,
+   "title": "Bug fix/tiq i1566   (BUG - Quiz Library - Folder list missing pagination/lazy loading )",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/552",
+   "author": "vignesh-9860",
+   "base": "BugFix/TIQ-I1566-new",
+   "head_sha": "32b87ec05b51a38943c48c2572ac21c1813c377c",
+   "created_at": "2026-09-15T02:23:22Z",
+   "age_days": 2.27,
+   "waiting_days": 2.12,
+   "first_review_at": "2026-09-15T03:37:29Z",
+   "last_review_at": "2026-09-15T05:55:17Z",
+   "your_last_review_at": "2026-09-15T05:55:17Z",
+   "your_last_review_sha": "bb66eacfa04e2b675b73abef09c14280cd448c5e",
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "none",
+   "additions": 178,
+   "deletions": 25,
+   "mergeable": true,
+   "bucket": "warm",
+   "you_queue": true
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 535,
+   "resolution": "merged",
+   "merged_at": "2026-09-16T17:48:34Z",
+   "closed_at": "2026-09-16T17:48:34Z",
+   "created_at": "2026-09-16T06:35:26Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 107,
+   "resolution": "merged",
+   "merged_at": "2026-09-17T04:30:29Z",
+   "closed_at": "2026-09-17T04:30:29Z",
+   "created_at": "2026-09-16T11:27:53Z"
+  }
+ ],
+ "errors": false
+}
