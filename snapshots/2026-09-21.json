@@ -1,0 +1,133 @@
+{
+ "date": "2026-09-21",
+ "generated_at": "2026-09-21T09:10:43.556797+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 550,
+   "title": "Feature TIQ-I1675 ( DEV -BE - Implement Recursive Deep Search Across Folders in Library Page )",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/550",
+   "author": "vignesh-9860",
+   "base": "develop",
+   "head_sha": "b530badad35d5927e604de0a78b37f8e5447338b",
+   "created_at": "2026-09-21T08:50:06Z",
+   "age_days": 0.01,
+   "waiting_days": 0.01,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "success",
+   "additions": 86,
+   "deletions": 24,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 565,
+   "title": "Feature TIQ-I1662 (DEV -FE - Implement Recursive Deep Search Across Folders in Library Page",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/565",
+   "author": "vignesh-9860",
+   "base": "Feature/TIQ-I1662",
+   "head_sha": "284c9ace3a25e26e33d661a14a33a0d8dd1d949c",
+   "created_at": "2026-09-21T05:17:59Z",
+   "age_days": 0.16,
+   "waiting_days": 0.14,
+   "first_review_at": "2026-09-21T05:51:13Z",
+   "last_review_at": "2026-09-21T05:51:13Z",
+   "your_last_review_at": "2026-09-21T05:51:13Z",
+   "your_last_review_sha": "284c9ace3a25e26e33d661a14a33a0d8dd1d949c",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 29,
+   "deletions": 10,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 114,
+   "title": "[TIQ-I1629] feat: attendance_photo sha256/S3 upload + backend-reachability check",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/114",
+   "author": "ajk-2409",
+   "base": "feature/TIQ-I1620-offline-full-e2e",
+   "head_sha": "de92e7512d7985feb1f4f6ab9295a7a02ebd3ad2",
+   "created_at": "2026-09-21T06:22:29Z",
+   "age_days": 0.12,
+   "waiting_days": 0.06,
+   "first_review_at": "2026-09-21T07:02:47Z",
+   "last_review_at": "2026-09-21T07:48:51Z",
+   "your_last_review_at": "2026-09-21T07:02:47Z",
+   "your_last_review_sha": "0d9d0e5a8033dfbff23dd8e4cc28077ae1a532cc",
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "none",
+   "additions": 1403,
+   "deletions": 70,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 113,
+   "title": "[TIQ-1620 \u2192 release/dev] feat: Local-first offline sync architecture",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/113",
+   "author": "ajk-2409",
+   "base": "release/dev",
+   "head_sha": "a2936414d5de7c70c401d3963c3f2295ffa0bfd1",
+   "created_at": "2026-09-21T05:36:24Z",
+   "age_days": 0.15,
+   "waiting_days": 0.15,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 8155,
+   "deletions": 786,
+   "mergeable": null,
+   "bucket": "fresh",
+   "you_queue": true
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 561,
+   "resolution": "merged",
+   "merged_at": "2026-09-19T06:11:53Z",
+   "closed_at": "2026-09-19T06:11:53Z",
+   "created_at": "2026-09-18T04:26:49Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 560,
+   "resolution": "merged",
+   "merged_at": "2026-09-21T05:08:38Z",
+   "closed_at": "2026-09-21T05:08:38Z",
+   "created_at": "2026-09-18T02:18:35Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 559,
+   "resolution": "merged",
+   "merged_at": "2026-09-21T05:08:42Z",
+   "closed_at": "2026-09-21T05:08:42Z",
+   "created_at": "2026-09-17T17:03:50Z"
+  }
+ ],
+ "errors": false
+}
