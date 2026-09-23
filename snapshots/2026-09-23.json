@@ -1,0 +1,91 @@
+{
+ "date": "2026-09-23",
+ "generated_at": "2026-09-23T08:44:16.179948+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 556,
+   "title": "TIQ-I1704: demo-data attach mode to fill the production demo org",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/556",
+   "author": "timmapuramreddy",
+   "base": "release/prod",
+   "head_sha": "99e9255dd33568ab059b45c525d7f9dab6f3f0e9",
+   "created_at": "2026-09-22T15:52:03Z",
+   "age_days": 0.7,
+   "waiting_days": 0.35,
+   "first_review_at": "2026-09-22T23:52:58Z",
+   "last_review_at": "2026-09-23T00:22:27Z",
+   "your_last_review_at": "2026-09-23T00:22:27Z",
+   "your_last_review_sha": "204eefe2e04d1c8445b625a249d864b843b201ba",
+   "reviewers": [
+    "scikraft-eed"
+   ],
+   "yours": false,
+   "ci": "failure",
+   "additions": 1192,
+   "deletions": 37,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 572,
+   "title": "Bug fix/tiq i1699 (BUG - Proper Error Message Not Displayed When Correct Answer Is Not Selected)",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/572",
+   "author": "vignesh-9860",
+   "base": "BugFix/TIQ-I1699-new",
+   "head_sha": "1426f6728d665217abcaef5910547cb79311154e",
+   "created_at": "2026-09-23T06:17:34Z",
+   "age_days": 0.1,
+   "waiting_days": 0.06,
+   "first_review_at": "2026-09-23T07:12:25Z",
+   "last_review_at": "2026-09-23T07:12:38Z",
+   "your_last_review_at": "2026-09-23T07:12:38Z",
+   "your_last_review_sha": "1426f6728d665217abcaef5910547cb79311154e",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 31,
+   "deletions": 24,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 113,
+   "title": "[TIQ-1620 \u2192 release/dev] feat: Local-first offline sync architecture",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/113",
+   "author": "ajk-2409",
+   "base": "release/dev",
+   "head_sha": "ba40d93de7f519aa86789b9773b039ed817ba9d4",
+   "created_at": "2026-09-21T05:36:24Z",
+   "age_days": 2.13,
+   "waiting_days": 2.13,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 9482,
+   "deletions": 780,
+   "mergeable": null,
+   "bucket": "warm",
+   "you_queue": true
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 126,
+   "resolution": "merged",
+   "merged_at": "2026-09-23T04:15:13Z",
+   "closed_at": "2026-09-23T04:15:13Z",
+   "created_at": "2026-09-21T12:33:49Z"
+  }
+ ],
+ "errors": false
+}
