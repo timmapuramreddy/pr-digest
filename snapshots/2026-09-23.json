@@ -1,6 +1,6 @@
 {
  "date": "2026-09-23",
- "generated_at": "2026-09-23T08:44:16.179948+00:00",
+ "generated_at": "2026-09-23T14:18:27.466159+00:00",
  "prs": [
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
@@ -11,8 +11,8 @@
    "base": "release/prod",
    "head_sha": "99e9255dd33568ab059b45c525d7f9dab6f3f0e9",
    "created_at": "2026-09-22T15:52:03Z",
-   "age_days": 0.7,
-   "waiting_days": 0.35,
+   "age_days": 0.94,
+   "waiting_days": 0.58,
    "first_review_at": "2026-09-22T23:52:58Z",
    "last_review_at": "2026-09-23T00:22:27Z",
    "your_last_review_at": "2026-09-23T00:22:27Z",
@@ -30,22 +30,24 @@
   },
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
-   "number": 572,
-   "title": "Bug fix/tiq i1699 (BUG - Proper Error Message Not Displayed When Correct Answer Is Not Selected)",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/572",
+   "number": 576,
+   "title": "[TIQ - I1669 -> release/qa]  (BUG - Proper Error Message Not Displayed When Correct Answer Is Not Selected)",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/576",
    "author": "vignesh-9860",
-   "base": "BugFix/TIQ-I1699-new",
-   "head_sha": "1426f6728d665217abcaef5910547cb79311154e",
-   "created_at": "2026-09-23T06:17:34Z",
-   "age_days": 0.1,
-   "waiting_days": 0.06,
-   "first_review_at": "2026-09-23T07:12:25Z",
-   "last_review_at": "2026-09-23T07:12:38Z",
-   "your_last_review_at": "2026-09-23T07:12:38Z",
-   "your_last_review_sha": "1426f6728d665217abcaef5910547cb79311154e",
-   "reviewers": [],
+   "base": "release/qa",
+   "head_sha": "c0876bdb0e2c5434cd6782ea77527e15a66f5605",
+   "created_at": "2026-09-23T10:29:48Z",
+   "age_days": 0.16,
+   "waiting_days": 0.16,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
    "yours": false,
-   "ci": "none",
+   "ci": "success",
    "additions": 31,
    "deletions": 24,
    "mergeable": true,
@@ -53,28 +55,30 @@
    "you_queue": false
   },
   {
-   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
-   "number": 113,
-   "title": "[TIQ-1620 \u2192 release/dev] feat: Local-first offline sync architecture",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/113",
-   "author": "ajk-2409",
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 575,
+   "title": "[TIQ-I1699 -> release/dev] (BUG - Proper Error Message Not Displayed When Correct Answer Is Not Selected)",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/575",
+   "author": "vignesh-9860",
    "base": "release/dev",
-   "head_sha": "ba40d93de7f519aa86789b9773b039ed817ba9d4",
-   "created_at": "2026-09-21T05:36:24Z",
-   "age_days": 2.13,
-   "waiting_days": 2.13,
+   "head_sha": "d9e3bd20aed248b4f287a9cf1fc81590175ee68d",
+   "created_at": "2026-09-23T10:14:27Z",
+   "age_days": 0.17,
+   "waiting_days": 0.17,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
    "your_last_review_sha": null,
-   "reviewers": [],
+   "reviewers": [
+    "ajk-2409"
+   ],
    "yours": false,
-   "ci": "none",
-   "additions": 9482,
-   "deletions": 780,
-   "mergeable": null,
-   "bucket": "warm",
-   "you_queue": true
+   "ci": "success",
+   "additions": 31,
+   "deletions": 24,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
   }
  ],
  "resolved": [
@@ -85,6 +89,14 @@
    "merged_at": "2026-09-23T04:15:13Z",
    "closed_at": "2026-09-23T04:15:13Z",
    "created_at": "2026-09-21T12:33:49Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 113,
+   "resolution": "merged",
+   "merged_at": "2026-09-23T10:25:59Z",
+   "closed_at": "2026-09-23T10:25:59Z",
+   "created_at": "2026-09-21T05:36:24Z"
   }
  ],
  "errors": false
