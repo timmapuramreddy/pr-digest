@@ -1,0 +1,93 @@
+{
+ "date": "2026-09-29",
+ "generated_at": "2026-09-29T10:01:00.831343+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 566,
+   "title": "fix(TIQ-I1733): stub Firebase and block outbound network in demo_data tests",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/566",
+   "author": "timmapuramreddy",
+   "base": "develop",
+   "head_sha": "4cde42a4290b91433af50a2847ffb861ce97b0ca",
+   "created_at": "2026-09-29T08:17:03Z",
+   "age_days": 0.07,
+   "waiting_days": 0.07,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [],
+   "yours": false,
+   "ci": "success",
+   "additions": 102,
+   "deletions": 19,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 582,
+   "title": "[TIQ-I1722 /TIQ-I1723 -> release-qa]",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/582",
+   "author": "vignesh-9860",
+   "base": "release/qa",
+   "head_sha": "010d21ef186aa36924eb5534380c2d16dcb21025",
+   "created_at": "2026-09-29T07:16:15Z",
+   "age_days": 0.11,
+   "waiting_days": 0.11,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 215,
+   "deletions": 13,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 581,
+   "title": "[TIQ-I1722 / TIQ-I1723 -> release-dev ]",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/581",
+   "author": "vignesh-9860",
+   "base": "release/dev",
+   "head_sha": "854751d8803857e214cd715c3db56fb56619713e",
+   "created_at": "2026-09-29T06:50:10Z",
+   "age_days": 0.13,
+   "waiting_days": 0.13,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 223,
+   "deletions": 36,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 580,
+   "resolution": "merged",
+   "merged_at": "2026-09-29T06:48:34Z",
+   "closed_at": "2026-09-29T06:48:34Z",
+   "created_at": "2026-09-28T10:04:02Z"
+  }
+ ],
+ "errors": false
+}
