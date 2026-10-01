@@ -1,6 +1,6 @@
 {
  "date": "2026-10-01",
- "generated_at": "2026-10-01T10:20:32.902238+00:00",
+ "generated_at": "2026-10-01T17:26:11.708270+00:00",
  "prs": [
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
@@ -11,8 +11,8 @@
    "base": "bugfix/TIQ-I1756-sso-role-screen-skip",
    "head_sha": "be4908d962c96a975d54f3557aebc73abb9416a2",
    "created_at": "2026-10-01T07:56:43Z",
-   "age_days": 0.1,
-   "waiting_days": 0.1,
+   "age_days": 0.4,
+   "waiting_days": 0.4,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
