@@ -1,0 +1,73 @@
+{
+ "date": "2026-10-05",
+ "generated_at": "2026-10-05T10:43:05.279008+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 587,
+   "title": "[TIQ-I1774] fix: Load all teacher classes in My Reports dropdown",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/587",
+   "author": "strat0-s",
+   "base": "bugfix/TIQ-I1774-my-reports-class-pagination",
+   "head_sha": "d6a786902e1ededda11b0ee25edddec49913dd92",
+   "created_at": "2026-10-05T09:14:37Z",
+   "age_days": 0.06,
+   "waiting_days": 0.03,
+   "first_review_at": "2026-10-05T09:46:56Z",
+   "last_review_at": "2026-10-05T09:56:16Z",
+   "your_last_review_at": "2026-10-05T09:47:52Z",
+   "your_last_review_sha": "90248f3abcda54b6e0223cc2d3c5266a79887268",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 22,
+   "deletions": 4,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 586,
+   "title": "[TIQ-I1722] fix: Read matrices, chemistry conditions, exponents and symbols aloud in TTS",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/586",
+   "author": "strat0-s",
+   "base": "bugfix/TIQ-I1722-tts-math-speech",
+   "head_sha": "968e3afa0abbe3f2cd7135196556f51702359623",
+   "created_at": "2026-10-05T07:34:29Z",
+   "age_days": 0.13,
+   "waiting_days": 0.03,
+   "first_review_at": "2026-10-05T09:49:46Z",
+   "last_review_at": "2026-10-05T10:03:39Z",
+   "your_last_review_at": "2026-10-05T10:03:39Z",
+   "your_last_review_sha": "968e3afa0abbe3f2cd7135196556f51702359623",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 716,
+   "deletions": 57,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 583,
+   "resolution": "merged",
+   "merged_at": "2026-10-05T05:17:35Z",
+   "closed_at": "2026-10-05T05:17:35Z",
+   "created_at": "2026-10-01T07:56:43Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 151,
+   "resolution": "merged",
+   "merged_at": "2026-10-04T16:34:55Z",
+   "closed_at": "2026-10-04T16:34:55Z",
+   "created_at": "2026-10-02T05:32:32Z"
+  }
+ ],
+ "errors": false
+}
