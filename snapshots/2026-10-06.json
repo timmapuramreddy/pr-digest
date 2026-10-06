@@ -1,0 +1,24 @@
+{
+ "date": "2026-10-06",
+ "generated_at": "2026-10-06T10:36:14.671117+00:00",
+ "prs": [],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 587,
+   "resolution": "merged",
+   "merged_at": "2026-10-05T10:59:23Z",
+   "closed_at": "2026-10-05T10:59:23Z",
+   "created_at": "2026-10-05T09:14:37Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 586,
+   "resolution": "merged",
+   "merged_at": "2026-10-05T10:59:26Z",
+   "closed_at": "2026-10-05T10:59:26Z",
+   "created_at": "2026-10-05T07:34:29Z"
+  }
+ ],
+ "errors": false
+}
