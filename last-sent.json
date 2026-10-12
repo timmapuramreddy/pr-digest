@@ -3,14 +3,19 @@
   {
    "key": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0#264",
    "bucket": "fresh",
-   "you_queue": true
+   "you_queue": false
   },
   {
    "key": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0#356",
+   "bucket": "stale",
+   "you_queue": false
+  },
+  {
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#584",
    "bucket": "fresh",
    "you_queue": false
   }
  ],
  "errors": false,
- "sent_at": "2026-10-09T17:29:52.942197+00:00"
+ "sent_at": "2026-10-12T11:10:38.671658+00:00"
 }
