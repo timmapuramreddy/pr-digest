@@ -1,0 +1,111 @@
+{
+ "date": "2026-10-14",
+ "generated_at": "2026-10-14T08:54:19.925561+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 585,
+   "title": "[TIQ-I1799 \u2192 develop] feat: Device mode \u2014 students answer on their own phones",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/585",
+   "author": "timmapuramreddy",
+   "base": "develop",
+   "head_sha": "558ee9417912dac60d9be8c59de8f7cda6de6aba",
+   "created_at": "2026-10-13T19:35:03Z",
+   "age_days": 0.56,
+   "waiting_days": 0.56,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 7817,
+   "deletions": 303,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 638,
+   "title": "[TIQ-I1799 \u2192 release/dev] feat: Device mode \u2014 students answer on their own phones",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/638",
+   "author": "timmapuramreddy",
+   "base": "release/dev",
+   "head_sha": "d71a6c3da4c5257474474bd95e7a7a86814d80a4",
+   "created_at": "2026-10-14T00:55:34Z",
+   "age_days": 0.33,
+   "waiting_days": 0.33,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 4312,
+   "deletions": 161,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 212,
+   "title": "[TIQ-I1799 \u2192 release/dev] feat: Device mode \u2014 run phone-answer sessions from the teacher app",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/212",
+   "author": "timmapuramreddy",
+   "base": "release/dev",
+   "head_sha": "e4188c5ea7ec557529652ca68a41ca71d98b7286",
+   "created_at": "2026-10-13T19:35:13Z",
+   "age_days": 0.55,
+   "waiting_days": 0.55,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "ajk-2409"
+   ],
+   "yours": false,
+   "ci": "none",
+   "additions": 4780,
+   "deletions": 233,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 356,
+   "resolution": "merged",
+   "merged_at": "2026-10-14T03:13:02Z",
+   "closed_at": "2026-10-14T03:13:02Z",
+   "created_at": "2026-10-08T16:25:53Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 211,
+   "resolution": "merged",
+   "merged_at": "2026-10-14T04:40:23Z",
+   "closed_at": "2026-10-14T04:40:23Z",
+   "created_at": "2026-10-13T16:42:32Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 210,
+   "resolution": "merged",
+   "merged_at": "2026-10-14T04:40:27Z",
+   "closed_at": "2026-10-14T04:40:27Z",
+   "created_at": "2026-10-13T16:41:36Z"
+  }
+ ],
+ "errors": false
+}
