@@ -1,0 +1,57 @@
+{
+ "date": "2026-10-15",
+ "generated_at": "2026-10-15T08:29:09.872698+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 360,
+   "title": "Feature/XP-I4268 fix, feat: build rich text editor for authoring content",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0/pull/360",
+   "author": "vignesh-9860",
+   "base": "Feature/XP-I4268-new",
+   "head_sha": "2c530f3c7232ab70bc3d1cc556fa842ebb77d658",
+   "created_at": "2026-10-15T02:15:33Z",
+   "age_days": 0.26,
+   "waiting_days": 0.2,
+   "first_review_at": "2026-10-15T02:19:41Z",
+   "last_review_at": "2026-10-15T03:38:26Z",
+   "your_last_review_at": "2026-10-15T03:38:26Z",
+   "your_last_review_sha": "2c530f3c7232ab70bc3d1cc556fa842ebb77d658",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 1515,
+   "deletions": 86,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 585,
+   "resolution": "merged",
+   "merged_at": "2026-10-15T05:49:32Z",
+   "closed_at": "2026-10-15T05:49:32Z",
+   "created_at": "2026-10-13T19:35:03Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 638,
+   "resolution": "merged",
+   "merged_at": "2026-10-15T05:56:31Z",
+   "closed_at": "2026-10-15T05:56:31Z",
+   "created_at": "2026-10-14T00:55:34Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 212,
+   "resolution": "merged",
+   "merged_at": "2026-10-15T04:40:39Z",
+   "closed_at": "2026-10-15T04:40:39Z",
+   "created_at": "2026-10-13T19:35:13Z"
+  }
+ ],
+ "errors": false
+}
