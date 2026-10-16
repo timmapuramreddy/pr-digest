@@ -1,0 +1,24 @@
+{
+ "date": "2026-10-16",
+ "generated_at": "2026-10-16T08:22:02.900784+00:00",
+ "prs": [],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 361,
+   "resolution": "merged",
+   "merged_at": "2026-10-16T04:17:10Z",
+   "closed_at": "2026-10-16T04:17:10Z",
+   "created_at": "2026-10-15T12:16:35Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 589,
+   "resolution": "merged",
+   "merged_at": "2026-10-16T05:53:32Z",
+   "closed_at": "2026-10-16T05:53:32Z",
+   "created_at": "2026-10-15T10:09:38Z"
+  }
+ ],
+ "errors": false
+}
