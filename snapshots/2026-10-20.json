@@ -1,0 +1,32 @@
+{
+ "date": "2026-10-20",
+ "generated_at": "2026-10-20T08:45:17.714850+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 364,
+   "title": "[TIQ-I4271 -> v3-develop] feat: add network connectivity and upload performance monitoring",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0/pull/364",
+   "author": "vignesh-9860",
+   "base": "v3-develop",
+   "head_sha": "3a8343049d44998a267466de9097e6e55cc35f27",
+   "created_at": "2026-10-19T10:03:59Z",
+   "age_days": 0.95,
+   "waiting_days": 0.35,
+   "first_review_at": "2026-10-20T00:19:20Z",
+   "last_review_at": "2026-10-20T00:19:20Z",
+   "your_last_review_at": "2026-10-20T00:19:20Z",
+   "your_last_review_sha": "3a8343049d44998a267466de9097e6e55cc35f27",
+   "reviewers": [],
+   "yours": false,
+   "ci": "failure",
+   "additions": 295,
+   "deletions": 12,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [],
+ "errors": false
+}
