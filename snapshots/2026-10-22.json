@@ -1,6 +1,6 @@
 {
  "date": "2026-10-22",
- "generated_at": "2026-10-22T08:47:55.371344+00:00",
+ "generated_at": "2026-10-22T14:35:25.269159+00:00",
  "prs": [
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
@@ -11,8 +11,8 @@
    "base": "release/qa",
    "head_sha": "a200ee6fb5aac05d573b86a49123a34006ab1f7b",
    "created_at": "2026-10-22T07:07:51Z",
-   "age_days": 0.07,
-   "waiting_days": 0.04,
+   "age_days": 0.31,
+   "waiting_days": 0.28,
    "first_review_at": "2026-10-22T07:47:29Z",
    "last_review_at": "2026-10-22T07:47:29Z",
    "your_last_review_at": null,
@@ -22,6 +22,32 @@
    "ci": "success",
    "additions": 103,
    "deletions": 0,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 219,
+   "title": "[TIQ-I1870, TIQ-I1828] perf: Back off failed pulls and read the YUV luma plane on Android",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/219",
+   "author": "ajk-2409",
+   "base": "feature/TIQ-I1870-I1828-scan-loop-cpu",
+   "head_sha": "6ddef5df1100d9519bc575d647c82573d604ca5f",
+   "created_at": "2026-10-22T10:18:48Z",
+   "age_days": 0.18,
+   "waiting_days": 0.18,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "none",
+   "additions": 93,
+   "deletions": 1,
    "mergeable": true,
    "bucket": "fresh",
    "you_queue": true
