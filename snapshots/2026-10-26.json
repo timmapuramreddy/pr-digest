@@ -1,7 +1,31 @@
 {
  "date": "2026-10-26",
- "generated_at": "2026-10-26T09:12:58.260167+00:00",
+ "generated_at": "2026-10-26T16:14:08.900153+00:00",
  "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
+   "number": 273,
+   "title": "fix: Only link Teacher Resources to quests the caller may author-edit",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0/pull/273",
+   "author": "vignesh-9860",
+   "base": "Feature/XP-I4273",
+   "head_sha": "a2baf19acb712c773432d3c4bfa64c2b113336a1",
+   "created_at": "2026-10-26T11:15:42Z",
+   "age_days": 0.21,
+   "waiting_days": 0.18,
+   "first_review_at": "2026-10-26T11:22:05Z",
+   "last_review_at": "2026-10-26T11:48:24Z",
+   "your_last_review_at": "2026-10-26T11:48:24Z",
+   "your_last_review_sha": "a2baf19acb712c773432d3c4bfa64c2b113336a1",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 199,
+   "deletions": 7,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
   {
    "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
    "number": 272,
@@ -11,8 +35,8 @@
    "base": "release-dev",
    "head_sha": "cbe0eb717167a0a262985923219cb50eb994805b",
    "created_at": "2026-10-26T06:49:24Z",
-   "age_days": 0.1,
-   "waiting_days": 0.09,
+   "age_days": 0.39,
+   "waiting_days": 0.39,
    "first_review_at": "2026-10-26T06:56:32Z",
    "last_review_at": "2026-10-26T06:56:32Z",
    "your_last_review_at": "2026-10-26T06:56:32Z",
@@ -27,58 +51,6 @@
    "you_queue": false
   },
   {
-   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
-   "number": 270,
-   "title": "XP-I4283: trust certifi CA bundle for gRPC TTS client (eMudhra CA) [release-prod]",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0/pull/270",
-   "author": "timmapuramreddy",
-   "base": "release-prod",
-   "head_sha": "74f0452289413917423dd2fcae6cf4aa2dd593b9",
-   "created_at": "2026-10-23T05:42:57Z",
-   "age_days": 3.15,
-   "waiting_days": 3.15,
-   "first_review_at": null,
-   "last_review_at": null,
-   "your_last_review_at": null,
-   "your_last_review_sha": null,
-   "reviewers": [
-    "scikraft-eed"
-   ],
-   "yours": false,
-   "ci": "none",
-   "additions": 168,
-   "deletions": 0,
-   "mergeable": true,
-   "bucket": "stale",
-   "you_queue": false
-  },
-  {
-   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
-   "number": 268,
-   "title": "XP-I4283: trust certifi CA bundle for gRPC TTS client (eMudhra CA)",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0/pull/268",
-   "author": "timmapuramreddy",
-   "base": "release-dev",
-   "head_sha": "5a1cc687b8889d8c909b0e75e3a20d6ae0db7808",
-   "created_at": "2026-10-23T05:39:54Z",
-   "age_days": 3.15,
-   "waiting_days": 3.15,
-   "first_review_at": null,
-   "last_review_at": null,
-   "your_last_review_at": null,
-   "your_last_review_sha": null,
-   "reviewers": [
-    "scikraft-eed"
-   ],
-   "yours": false,
-   "ci": "none",
-   "additions": 168,
-   "deletions": 0,
-   "mergeable": true,
-   "bucket": "stale",
-   "you_queue": false
-  },
-  {
    "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
    "number": 365,
    "title": "XP-I4273 fix (Add/Edit Content \u2013 Fix Issues and Stabilize the Feature in Dev)",
@@ -87,8 +59,8 @@
    "base": "Feature/XP-I4273",
    "head_sha": "54c9e0df52dfc4f2c4763a6e23f02709c13b1b28",
    "created_at": "2026-10-26T07:12:47Z",
-   "age_days": 0.08,
-   "waiting_days": 0.08,
+   "age_days": 0.38,
+   "waiting_days": 0.38,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
@@ -113,8 +85,8 @@
    "base": "release/prod",
    "head_sha": "cc9995cbb8a1f10db7748bed890cfb8aa6876327",
    "created_at": "2026-10-23T05:17:28Z",
-   "age_days": 3.16,
-   "waiting_days": 3.16,
+   "age_days": 3.46,
+   "waiting_days": 3.46,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
@@ -127,35 +99,17 @@
    "mergeable": true,
    "bucket": "stale",
    "you_queue": true
-  },
-  {
-   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
-   "number": 285,
-   "title": "[TIQ-I1860 \u2192 release/dev] feat: Create anonymous poll sessions offline",
-   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-mobile/pull/285",
-   "author": "ajk-2409",
-   "base": "release/dev",
-   "head_sha": "09eef198989c15b58852b778113d76e080e2d6cb",
-   "created_at": "2026-10-26T09:07:30Z",
-   "age_days": 0.0,
-   "waiting_days": 0.0,
-   "first_review_at": null,
-   "last_review_at": null,
-   "your_last_review_at": null,
-   "your_last_review_sha": null,
-   "reviewers": [
-    "strat0-s"
-   ],
-   "yours": false,
-   "ci": "success",
-   "additions": 1559,
-   "deletions": 45,
-   "mergeable": true,
-   "bucket": "fresh",
-   "you_queue": false
   }
  ],
  "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
+   "number": 270,
+   "resolution": "merged",
+   "merged_at": "2026-10-26T15:46:26Z",
+   "closed_at": "2026-10-26T15:46:26Z",
+   "created_at": "2026-10-23T05:42:57Z"
+  },
   {
    "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
    "number": 269,
@@ -163,6 +117,14 @@
    "merged_at": "2026-10-26T05:55:45Z",
    "closed_at": "2026-10-26T05:55:45Z",
    "created_at": "2026-10-23T05:42:55Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
+   "number": 268,
+   "resolution": "merged",
+   "merged_at": "2026-10-26T15:44:56Z",
+   "closed_at": "2026-10-26T15:44:56Z",
+   "created_at": "2026-10-23T05:39:54Z"
   },
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
