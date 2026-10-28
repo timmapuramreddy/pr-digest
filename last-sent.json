@@ -4,8 +4,13 @@
    "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#597",
    "bucket": "stale",
    "you_queue": true
+  },
+  {
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#643",
+   "bucket": "fresh",
+   "you_queue": false
   }
  ],
  "errors": false,
- "sent_at": "2026-10-28T09:54:16.357229+00:00"
+ "sent_at": "2026-10-28T17:14:22.966037+00:00"
 }
