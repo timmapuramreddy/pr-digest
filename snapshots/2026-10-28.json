@@ -1,6 +1,6 @@
 {
  "date": "2026-10-28",
- "generated_at": "2026-10-28T09:54:16.357229+00:00",
+ "generated_at": "2026-10-28T17:14:22.966037+00:00",
  "prs": [
   {
    "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
@@ -11,8 +11,8 @@
    "base": "release/prod",
    "head_sha": "cc9995cbb8a1f10db7748bed890cfb8aa6876327",
    "created_at": "2026-10-23T05:17:28Z",
-   "age_days": 5.19,
-   "waiting_days": 5.19,
+   "age_days": 5.5,
+   "waiting_days": 5.5,
    "first_review_at": null,
    "last_review_at": null,
    "your_last_review_at": null,
@@ -25,6 +25,30 @@
    "mergeable": true,
    "bucket": "stale",
    "you_queue": true
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 643,
+   "title": "[TIQ-I1873] feat: Make last name optional and allow same-name students with different rolls",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/643",
+   "author": "strat0-s",
+   "base": "feature/TIQ-I1873-roll-id-name-disambiguation",
+   "head_sha": "4f0599911f678b15190ee7dbd6c68e15f923c7c9",
+   "created_at": "2026-10-28T10:52:28Z",
+   "age_days": 0.27,
+   "waiting_days": 0.24,
+   "first_review_at": "2026-10-28T11:09:03Z",
+   "last_review_at": "2026-10-28T11:31:46Z",
+   "your_last_review_at": "2026-10-28T11:31:46Z",
+   "your_last_review_sha": "4f0599911f678b15190ee7dbd6c68e15f923c7c9",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 340,
+   "deletions": 101,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
   }
  ],
  "resolved": [
