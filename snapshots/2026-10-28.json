@@ -1,0 +1,57 @@
+{
+ "date": "2026-10-28",
+ "generated_at": "2026-10-28T09:54:16.357229+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 597,
+   "title": "[TIQ-I1869 \u2192 release/prod] fix: Stop trusting the compromised eMudhra CA root",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/597",
+   "author": "timmapuramreddy",
+   "base": "release/prod",
+   "head_sha": "cc9995cbb8a1f10db7748bed890cfb8aa6876327",
+   "created_at": "2026-10-23T05:17:28Z",
+   "age_days": 5.19,
+   "waiting_days": 5.19,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [],
+   "yours": false,
+   "ci": "success",
+   "additions": 103,
+   "deletions": 0,
+   "mergeable": true,
+   "bucket": "stale",
+   "you_queue": true
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 368,
+   "resolution": "merged",
+   "merged_at": "2026-10-27T16:30:27Z",
+   "closed_at": "2026-10-27T16:30:27Z",
+   "created_at": "2026-10-27T14:14:33Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-frontend-v3.0",
+   "number": 367,
+   "resolution": "merged",
+   "merged_at": "2026-10-28T02:49:03Z",
+   "closed_at": "2026-10-28T02:49:03Z",
+   "created_at": "2026-10-27T12:13:35Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 605,
+   "resolution": "merged",
+   "merged_at": "2026-10-28T04:36:15Z",
+   "closed_at": "2026-10-28T04:36:15Z",
+   "created_at": "2026-10-27T07:26:59Z"
+  }
+ ],
+ "errors": false
+}
