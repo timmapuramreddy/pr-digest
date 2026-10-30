@@ -1,0 +1,149 @@
+{
+ "date": "2026-10-30",
+ "generated_at": "2026-10-30T10:18:17.470346+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 624,
+   "title": "[QA]  Feature tiq i1881 qa -->  AI wrong answer Analysis",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/624",
+   "author": "jahnavi31r",
+   "base": "release/qa",
+   "head_sha": "749f5313dafa1228b3c4d9a412098f609128cbb1",
+   "created_at": "2026-10-30T07:00:08Z",
+   "age_days": 0.14,
+   "waiting_days": 0.12,
+   "first_review_at": "2026-10-30T07:23:10Z",
+   "last_review_at": "2026-10-30T07:23:10Z",
+   "your_last_review_at": "2026-10-30T07:23:10Z",
+   "your_last_review_sha": "749f5313dafa1228b3c4d9a412098f609128cbb1",
+   "reviewers": [],
+   "yours": false,
+   "ci": "failure",
+   "additions": 5326,
+   "deletions": 119,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 621,
+   "title": "TIQ-I1893: remove per-row queries from quizzes, classes and student sessions lists",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/621",
+   "author": "timmapuramreddy",
+   "base": "develop",
+   "head_sha": "790ac2acac8351a83ae1615cfb22fef2503d60ae",
+   "created_at": "2026-10-30T04:33:59Z",
+   "age_days": 0.24,
+   "waiting_days": 0.19,
+   "first_review_at": "2026-10-30T04:40:00Z",
+   "last_review_at": "2026-10-30T05:51:47Z",
+   "your_last_review_at": "2026-10-30T04:40:00Z",
+   "your_last_review_sha": "790ac2acac8351a83ae1615cfb22fef2503d60ae",
+   "reviewers": [],
+   "yours": false,
+   "ci": "success",
+   "additions": 218,
+   "deletions": 34,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 597,
+   "title": "[TIQ-I1869 \u2192 release/prod] fix: Stop trusting the compromised eMudhra CA root",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/597",
+   "author": "timmapuramreddy",
+   "base": "release/prod",
+   "head_sha": "cc9995cbb8a1f10db7748bed890cfb8aa6876327",
+   "created_at": "2026-10-23T05:17:28Z",
+   "age_days": 7.21,
+   "waiting_days": 1.36,
+   "first_review_at": "2026-10-29T01:35:15Z",
+   "last_review_at": "2026-10-29T01:35:15Z",
+   "your_last_review_at": "2026-10-29T01:35:15Z",
+   "your_last_review_sha": "cc9995cbb8a1f10db7748bed890cfb8aa6876327",
+   "reviewers": [
+    "scikraft-eed"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 103,
+   "deletions": 0,
+   "mergeable": true,
+   "bucket": "warm",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 647,
+   "title": "[TIQ-I1882 -> release/dev] AI wrong answer Analysis",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-frontend/pull/647",
+   "author": "jahnavi31r",
+   "base": "release/dev",
+   "head_sha": "5bf9b511f3f87da1711fd234229379af11b03e58",
+   "created_at": "2026-10-30T07:13:15Z",
+   "age_days": 0.13,
+   "waiting_days": 0.13,
+   "first_review_at": null,
+   "last_review_at": null,
+   "your_last_review_at": null,
+   "your_last_review_sha": null,
+   "reviewers": [
+    "vignesh-9860"
+   ],
+   "yours": false,
+   "ci": "failure",
+   "additions": 2785,
+   "deletions": 85,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 613,
+   "resolution": "merged",
+   "merged_at": "2026-10-30T05:08:32Z",
+   "closed_at": "2026-10-30T05:08:32Z",
+   "created_at": "2026-10-29T10:02:07Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 646,
+   "resolution": "merged",
+   "merged_at": "2026-10-30T06:57:17Z",
+   "closed_at": "2026-10-30T06:57:17Z",
+   "created_at": "2026-10-29T10:14:12Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 289,
+   "resolution": "merged",
+   "merged_at": "2026-10-29T17:51:36Z",
+   "closed_at": "2026-10-29T17:51:36Z",
+   "created_at": "2026-10-29T17:00:24Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 288,
+   "resolution": "merged",
+   "merged_at": "2026-10-29T17:51:31Z",
+   "closed_at": "2026-10-29T17:51:31Z",
+   "created_at": "2026-10-29T16:25:34Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 287,
+   "resolution": "merged",
+   "merged_at": "2026-10-29T17:51:25Z",
+   "closed_at": "2026-10-29T17:51:26Z",
+   "created_at": "2026-10-29T16:25:29Z"
+  }
+ ],
+ "errors": false
+}
