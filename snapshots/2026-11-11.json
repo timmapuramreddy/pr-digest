@@ -1,0 +1,117 @@
+{
+ "date": "2026-11-11",
+ "generated_at": "2026-11-11T11:18:03.416840+00:00",
+ "prs": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0",
+   "number": 296,
+   "title": "[XP-I4311] chore: Move XPeye to gemini-3.5-flash-lite and drop thinking budget",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0/pull/296",
+   "author": "strat0-s",
+   "base": "feature/XP-I4311-xpeye-gemini-3-5-flash-lite",
+   "head_sha": "7e944f2df92714d935c7c11232b7de9c589689ae",
+   "created_at": "2026-11-11T11:02:28Z",
+   "age_days": 0.01,
+   "waiting_days": 0.0,
+   "first_review_at": "2026-11-11T11:10:01Z",
+   "last_review_at": "2026-11-11T11:11:04Z",
+   "your_last_review_at": "2026-11-11T11:11:04Z",
+   "your_last_review_sha": "7e944f2df92714d935c7c11232b7de9c589689ae",
+   "reviewers": [],
+   "yours": false,
+   "ci": "none",
+   "additions": 5,
+   "deletions": 14,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 647,
+   "title": "TIQ-I1969: Attendance RTDB pushes use the named Firebase app",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/647",
+   "author": "timmapuramreddy",
+   "base": "develop",
+   "head_sha": "f3c03a9f8a00747a8c8390eadd88fc12d30a6360",
+   "created_at": "2026-11-11T09:03:48Z",
+   "age_days": 0.09,
+   "waiting_days": 0.09,
+   "first_review_at": "2026-11-11T09:09:08Z",
+   "last_review_at": "2026-11-11T09:09:08Z",
+   "your_last_review_at": "2026-11-11T09:09:08Z",
+   "your_last_review_sha": "f3c03a9f8a00747a8c8390eadd88fc12d30a6360",
+   "reviewers": [
+    "scikraft-eed"
+   ],
+   "yours": false,
+   "ci": "success",
+   "additions": 252,
+   "deletions": 74,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 646,
+   "title": "[TIQ-I1939 \u2192 develop] feat: Add session_summary as a cloud sync entity with backfill",
+   "url": "https://github.com/Scikraft-Edu-Engg-Design/tiqer-standalone-backend/pull/646",
+   "author": "strat0-s",
+   "base": "develop",
+   "head_sha": "3cf443ddc8269122754a01b9678c407c0f1d861c",
+   "created_at": "2026-11-11T07:21:24Z",
+   "age_days": 0.16,
+   "waiting_days": 0.01,
+   "first_review_at": "2026-11-11T07:53:40Z",
+   "last_review_at": "2026-11-11T11:03:41Z",
+   "your_last_review_at": "2026-11-11T10:41:53Z",
+   "your_last_review_sha": "2c8fcdf0501c44766babed20a0bbc06d5965e788",
+   "reviewers": [
+    "timmapuramreddy"
+   ],
+   "yours": true,
+   "ci": "success",
+   "additions": 1562,
+   "deletions": 289,
+   "mergeable": true,
+   "bucket": "fresh",
+   "you_queue": true
+  }
+ ],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 642,
+   "resolution": "merged",
+   "merged_at": "2026-11-11T07:10:43Z",
+   "closed_at": "2026-11-11T07:10:44Z",
+   "created_at": "2026-11-09T08:54:16Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend",
+   "number": 597,
+   "resolution": "closed_unmerged",
+   "merged_at": null,
+   "closed_at": "2026-11-11T05:23:57Z",
+   "created_at": "2026-10-23T05:17:28Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend",
+   "number": 675,
+   "resolution": "merged",
+   "merged_at": "2026-11-11T04:41:44Z",
+   "closed_at": "2026-11-11T04:41:44Z",
+   "created_at": "2026-11-09T04:04:34Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 309,
+   "resolution": "merged",
+   "merged_at": "2026-11-11T04:26:42Z",
+   "closed_at": "2026-11-11T04:26:42Z",
+   "created_at": "2026-11-09T06:37:53Z"
+  }
+ ],
+ "errors": false
+}
