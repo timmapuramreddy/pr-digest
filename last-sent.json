@@ -1,26 +1,21 @@
 {
  "prs": [
   {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#642",
-   "bucket": "warm",
+   "key": "Scikraft-Edu-Engg-Design/xperimentor-backend-v3.0#296",
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#647",
+   "bucket": "fresh",
+   "you_queue": false
+  },
+  {
+   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#646",
+   "bucket": "fresh",
    "you_queue": true
-  },
-  {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-backend#597",
-   "bucket": "escalate",
-   "you_queue": false
-  },
-  {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-frontend#675",
-   "bucket": "warm",
-   "you_queue": false
-  },
-  {
-   "key": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile#309",
-   "bucket": "warm",
-   "you_queue": false
   }
  ],
  "errors": false,
- "sent_at": "2026-11-10T11:28:32.494798+00:00"
+ "sent_at": "2026-11-11T11:18:03.416840+00:00"
 }
