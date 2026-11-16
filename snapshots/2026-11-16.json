@@ -1,0 +1,32 @@
+{
+ "date": "2026-11-16",
+ "generated_at": "2026-11-16T11:50:56.278823+00:00",
+ "prs": [],
+ "resolved": [
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 332,
+   "resolution": "merged",
+   "merged_at": "2026-11-16T05:10:50Z",
+   "closed_at": "2026-11-16T05:10:50Z",
+   "created_at": "2026-11-13T12:28:01Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 331,
+   "resolution": "merged",
+   "merged_at": "2026-11-16T05:49:29Z",
+   "closed_at": "2026-11-16T05:49:29Z",
+   "created_at": "2026-11-13T12:20:41Z"
+  },
+  {
+   "repo": "Scikraft-Edu-Engg-Design/tiqer-standalone-mobile",
+   "number": 330,
+   "resolution": "merged",
+   "merged_at": "2026-11-16T04:45:08Z",
+   "closed_at": "2026-11-16T04:45:08Z",
+   "created_at": "2026-11-13T12:20:33Z"
+  }
+ ],
+ "errors": false
+}
