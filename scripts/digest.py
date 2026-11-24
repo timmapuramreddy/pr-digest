@@ -567,6 +567,8 @@ def esc(text):
         .replace("&", "&amp;")
         .replace("<", "&lt;")
         .replace(">", "&gt;")
+        .replace('"', "&quot;")
+        .replace("'", "&#x27;")
     )
 
 
@@ -633,7 +635,7 @@ def row(pr):
     return f"""
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #e5e7eb">
-        <a href="{pr['url']}" style="color:#1d4ed8;text-decoration:none;font-weight:600">
+        <a href="{esc(pr['url'])}" style="color:#1d4ed8;text-decoration:none;font-weight:600">
           {esc(pr['repo'].split('/')[-1])} #{pr['number']}</a>{badges}<br>
         <span style="color:#111827">{esc(pr['title'])}</span><br>
         <span style="color:#6b7280;font-size:12px">

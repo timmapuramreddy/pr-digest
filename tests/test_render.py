@@ -104,3 +104,18 @@ def test_no_all_clear_when_repo_errors():
         [("o/x", "HTTP 401")]
     )
     assert "Nothing waiting" not in html and "HTTP 401" in html
+
+
+def test_row_href_escapes_quotes():
+    html = digest.row(strip_pr("b#1", url='https://x/a"b\'c&d'))
+    assert 'href="https://x/a&quot;b&#x27;c&amp;d"' in html
+    assert 'a"b' not in html
+
+
+def test_dashboard_href_escapes_quotes():
+    html = digest.build_html(
+        make_cfg_for_render(dashboard_url='https://x/d"e\'f'),
+        [strip_pr("b#1")], None, None, None, [], []
+    )
+    assert 'href="https://x/d&quot;e&#x27;f"' in html
+    assert 'd"e' not in html
